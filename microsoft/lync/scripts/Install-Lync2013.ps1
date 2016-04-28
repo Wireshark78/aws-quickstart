@@ -40,7 +40,7 @@ try {
 
     Write-Verbose "Downloading/Mounting Lync Server ISO @ $(Get-Date)"
 
-    Start-BitsTransfer -Source https://s3.amazonaws.com/quickstart-reference/microsoft/lync/installers/LS-E-8308.0-enUS.iso -Destination c:\cfn\downloads
+    Start-BitsTransfer -Source https://s3.amazonaws.com/quickstart-reference/microsoft/lync/latest/installers/LS-E-8308.0-enUS.iso -Destination c:\cfn\downloads
     Mount-DiskImage -ImagePath c:\cfn\downloads\LS-E-8308.0-enUS.iso
    
     Write-Verbose "Installing Lync pre-requisites @ $(Get-Date)"
