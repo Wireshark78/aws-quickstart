@@ -251,7 +251,7 @@
                                 "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/utilities/latest/scripts/Unzip-Archive.ps1"
                             },
                             "c:\\cfn\\downloads\\Silverlight_x64.exe"  : {
-                                "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/lync/installers/Silverlight_x64.exe"
+                                "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/lync/latest/installers/Silverlight_x64.exe"
                             },
                             "c:\\cfn\\modules\\AWSQuickStart.zip"      : {
                                 "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/utilities/latest/modules/AWSQuickStart.zip"
@@ -260,22 +260,22 @@
                                 "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/utilities/latest/scripts/Join-Domain.ps1"
                             },
                             "c:\\cfn\\scripts\\Disable-AutoLogon.ps1"  : {
-                                "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/exchange/scripts/Disable-AutoLogon.ps1"
+                                "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/utilities/latest/scripts/Disable-AutoLogon.ps1"
                             },
                             "c:\\cfn\\scripts\\Enable-AutoLogon.ps1"   : {
-                                "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/exchange/scripts/Enable-AutoLogon.ps1"
+                                "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/utilities/latest/scripts/Enable-AutoLogon.ps1"
                             },
                             "c:\\cfn\\scripts\\Invoke-ADReplication.ps1" : {
                                 "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/utilities/latest/scripts/Invoke-ADReplication.ps1"
                             },
                             "c:\\cfn\\scripts\\Topology.xml"             : {
-                                "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/lync/scripts/Topology.xml"
+                                "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/lync/latest/scripts/Topology.xml"
                             },
                             "c:\\cfn\\scripts\\Topology-Edge.xml"        : {
-                                "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/lync/scripts/Topology-Edge.xml"
+                                "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/lync/latest/scripts/Topology-Edge.xml"
                             },
                             "c:\\cfn\\scripts\\Install-Lync2013.ps1"     : {
-                                "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/lync/scripts/Install-Lync2013.ps1"
+                                "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/lync/latest/scripts/Install-Lync2013.ps1"
                             },
                             "c:\\cfn\\scripts\\Install.bat"              : {
                                 "content" : {
@@ -652,7 +652,7 @@
                                 "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/utilities/latest/scripts/Unzip-Archive.ps1"
                             },
                             "c:\\cfn\\downloads\\Silverlight_x64.exe"  : {
-                                "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/lync/installers/Silverlight_x64.exe"
+                                "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/lync/latest/installers/Silverlight_x64.exe"
                             },
                             "c:\\cfn\\modules\\AWSQuickStart.zip"      : {
                                 "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/utilities/latest/modules/AWSQuickStart.zip"
@@ -661,19 +661,19 @@
                                 "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/utilities/latest/scripts/Join-Domain.ps1"
                             },
                             "c:\\cfn\\scripts\\Disable-AutoLogon.ps1"  : {
-                                "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/exchange/scripts/Disable-AutoLogon.ps1"
+                                "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/utilities/latest/scripts/Disable-AutoLogon.ps1"
                             },
                             "c:\\cfn\\scripts\\Enable-AutoLogon.ps1"   : {
-                                "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/exchange/scripts/Enable-AutoLogon.ps1"
+                                "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/utilities/latest/scripts/Enable-AutoLogon.ps1"
                             },
                             "c:\\cfn\\scripts\\Invoke-ADReplication.ps1" : {
                                 "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/utilities/latest/scripts/Invoke-ADReplication.ps1"
                             },
                             "c:\\cfn\\scripts\\Topology.xml"             : {
-                                "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/lync/scripts/Topology.xml"
+                                "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/lync/latest/scripts/Topology.xml"
                             },
                             "c:\\cfn\\scripts\\Install-Lync2013.ps1"     : {
-                                "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/lync/scripts/Install-Lync2013.ps1"
+                                "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/lync/latest/scripts/Install-Lync2013.ps1"
                             },
                             "c:\\cfn\\scripts\\Install.bat"              : {
                                 "content" : {
@@ -1230,22 +1230,22 @@
                                 "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/utilities/latest/modules/AWSQuickStart.zip"
                             },
                             "c:\\cfn\\scripts\\Disable-AutoLogon.ps1"  : {
-                                "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/exchange/scripts/Disable-AutoLogon.ps1"
+                                "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/utilities/latest/scripts/Disable-AutoLogon.ps1"
                             },
                             "c:\\cfn\\scripts\\Enable-AutoLogon.ps1"   : {
-                                "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/exchange/scripts/Enable-AutoLogon.ps1"
+                                "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/utilities/latest/scripts/Enable-AutoLogon.ps1"
                             },
                             "c:\\cfn\\scripts\\Set-PrimaryDnsSuffix.ps1" : {
-                                "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/exchange/scripts/Set-PrimaryDnsSuffix.ps1"
+                                "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/exchange/latest/scripts/Set-PrimaryDnsSuffix.ps1"
                             },
                             "c:\\cfn\\scripts\\Set-LyncEdgeNetwork.ps1"  : {
-                                "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/lync/scripts/Set-LyncEdgeNetwork.ps1"
+                                "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/lync/latest/scripts/Set-LyncEdgeNetwork.ps1"
                             },
                             "c:\\cfn\\scripts\\Reset-LocalAdminPassword.ps1" : {
-                                "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/exchange/scripts/Reset-LocalAdminPassword.ps1"
+                                "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/exchange/latest/scripts/Reset-LocalAdminPassword.ps1"
                             },
                             "c:\\cfn\\scripts\\New-LyncEdge.ps1"             : {
-                                "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/lync/scripts/New-LyncEdge.ps1"
+                                "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/lync/latest/scripts/New-LyncEdge.ps1"
                             },
                             "c:\\cfn\\scripts\\Install.bat"                  : {
                                 "content" : {
@@ -1577,22 +1577,22 @@
                                 "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/utilities/latest/modules/AWSQuickStart.zip"
                             },
                             "c:\\cfn\\scripts\\Disable-AutoLogon.ps1"  : {
-                                "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/exchange/scripts/Disable-AutoLogon.ps1"
+                                "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/utilities/latest/scripts/Disable-AutoLogon.ps1"
                             },
                             "c:\\cfn\\scripts\\Enable-AutoLogon.ps1"   : {
-                                "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/exchange/scripts/Enable-AutoLogon.ps1"
+                                "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/utilities/latest/scripts/Enable-AutoLogon.ps1"
                             },
                             "c:\\cfn\\scripts\\Set-PrimaryDnsSuffix.ps1" : {
-                                "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/exchange/scripts/Set-PrimaryDnsSuffix.ps1"
+                                "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/exchange/latest/scripts/Set-PrimaryDnsSuffix.ps1"
                             },
                             "c:\\cfn\\scripts\\Set-LyncEdgeNetwork.ps1"  : {
-                                "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/lync/scripts/Set-LyncEdgeNetwork.ps1"
+                                "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/lync/latest/scripts/Set-LyncEdgeNetwork.ps1"
                             },
                             "c:\\cfn\\scripts\\Reset-LocalAdminPassword.ps1" : {
-                                "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/exchange/scripts/Reset-LocalAdminPassword.ps1"
+                                "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/exchange/latest/scripts/Reset-LocalAdminPassword.ps1"
                             },
                             "c:\\cfn\\scripts\\New-LyncEdge.ps1"             : {
-                                "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/lync/scripts/New-LyncEdge.ps1"
+                                "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/lync/latest/scripts/New-LyncEdge.ps1"
                             },
                             "c:\\cfn\\scripts\\Install.bat"                  : {
                                 "content" : {
