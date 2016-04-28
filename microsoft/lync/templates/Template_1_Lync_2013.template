@@ -340,7 +340,23 @@
                                 "waitAfterCompletion" : "0"
                             },
                             "c-init-quickstart-module"   : {
-                                "command" : "powershell.exe -command New-AWSQuickStartWaitHandle -Handle FE1",
+                                "command" : {
+                                    "Fn::Join": [
+                                        "",
+                                        [
+                                            "powershell.exe -Command \"",
+                                            "New-AWSQuickStartResourceSignal -Stack '",
+                                            {
+                                                "Ref": "AWS::StackName"
+                                            },
+                                            "' -Resource 'FE1' -Region '",
+                                            {
+                                                "Ref": "AWS::Region"
+                                            },
+                                            "'\""
+                                        ]
+                                    ]
+                                },
                                 "waitAfterCompletion" : "0"
                             }
                         },
@@ -697,7 +713,23 @@
                                 "waitAfterCompletion" : "0"
                             },
                             "c-init-quickstart-module"   : {
-                                "command" : "powershell.exe -command New-AWSQuickStartWaitHandle -Handle FE2",
+                                "command" : {
+                                    "Fn::Join": [
+                                        "",
+                                        [
+                                            "powershell.exe -Command \"",
+                                            "New-AWSQuickStartResourceSignal -Stack '",
+                                            {
+                                                "Ref": "AWS::StackName"
+                                            },
+                                            "' -Resource 'FE2' -Region '",
+                                            {
+                                                "Ref": "AWS::Region"
+                                            },
+                                            "'\""
+                                        ]
+                                    ]
+                                },
                                 "waitAfterCompletion" : "0"
                             }
                         },
@@ -1278,7 +1310,23 @@
                                 "waitAfterCompletion" : "0"
                             },
                             "c-init-quickstart-module"   : {
-                                "command" : "powershell.exe -command New-AWSQuickStartWaitHandle -Handle LE1",
+                                "command" : {
+                                    "Fn::Join": [
+                                        "",
+                                        [
+                                            "powershell.exe -Command \"",
+                                            "New-AWSQuickStartResourceSignal -Stack '",
+                                            {
+                                                "Ref": "AWS::StackName"
+                                            },
+                                            "' -Resource 'LE1' -Region '",
+                                            {
+                                                "Ref": "AWS::Region"
+                                            },
+                                            "'\""
+                                        ]
+                                    ]
+                                },
                                 "waitAfterCompletion" : "0"
                             },
                             "d-reset-local-admin"        : {
@@ -1600,7 +1648,23 @@
                                 "waitAfterCompletion" : "0"
                             },
                             "c-init-quickstart-module"   : {
-                                "command" : "powershell.exe -command New-AWSQuickStartWaitHandle -Handle LE2",
+                                "command" : {
+                                    "Fn::Join": [
+                                        "",
+                                        [
+                                            "powershell.exe -Command \"",
+                                            "New-AWSQuickStartResourceSignal -Stack '",
+                                            {
+                                                "Ref": "AWS::StackName"
+                                            },
+                                            "' -Resource 'LE2' -Region '",
+                                            {
+                                                "Ref": "AWS::Region"
+                                            },
+                                            "'\""
+                                        ]
+                                    ]
+                                },
                                 "waitAfterCompletion" : "0"
                             },
                             "d-reset-local-admin"        : {
