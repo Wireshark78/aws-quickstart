@@ -1,5 +1,3 @@
-aws-quickstart
-==============
+# aws-quickstart
 
-These utility scripts are common scripts shared by the Microsoft based Quick Starts
- 
+This has moved to https://github.com/aws-quickstart/quickstart-microsoft-utilities
