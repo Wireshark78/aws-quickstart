@@ -391,7 +391,7 @@
                                 "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/exchange/latest/scripts/Initialize-ExchangeVolume.ps1"
                             },
                             "c:\\cfn\\modules\\AWSQuickStart.zip"             : {
-                                "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/utilities/latest/scripts/AWSQuickStart.zip"
+                                "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/utilities/latest/modules/AWSQuickStart.zip"
                             },
                             "c:\\cfn\\scripts\\CreateWaitHandle.ps1"          : {
                                 "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/utilities/latest/scripts/CreateWaitHandle.ps1"
@@ -907,7 +907,7 @@
                                 "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/exchange/latest/scripts/Initialize-ExchangeVolume.ps1"
                             },
                             "c:\\cfn\\modules\\AWSQuickStart.zip"             : {
-                                "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/utilities/latest/scripts/AWSQuickStart.zip"
+                                "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/utilities/latest/modules/AWSQuickStart.zip"
                             },
                             "c:\\cfn\\scripts\\CreateWaitHandle.ps1"          : {
                                 "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/utilities/latest/scripts/CreateWaitHandle.ps1"
@@ -1341,7 +1341,7 @@
                                 "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/utilities/latest/scripts/Unzip-Archive.ps1"
                             },
                             "c:\\cfn\\modules\\AWSQuickStart.zip"      : {
-                                "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/utilities/latest/scripts/AWSQuickStart.zip"
+                                "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/utilities/latest/modules/AWSQuickStart.zip"
                             },
                             "c:\\cfn\\scripts\\CreateWaitHandle.ps1"   : {
                                 "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/utilities/latest/scripts/CreateWaitHandle.ps1"
@@ -1709,7 +1709,7 @@
                                 "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/utilities/latest/scripts/Unzip-Archive.ps1"
                             },
                             "c:\\cfn\\modules\\AWSQuickStart.zip"      : {
-                                "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/utilities/latest/scripts/AWSQuickStart.zip"
+                                "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/utilities/latest/modules/AWSQuickStart.zip"
                             },
                             "c:\\cfn\\scripts\\CreateWaitHandle.ps1"   : {
                                 "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/utilities/latest/scripts/CreateWaitHandle.ps1"
