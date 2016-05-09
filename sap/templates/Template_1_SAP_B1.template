@@ -1,349 +1,336 @@
 {
-    "AWSTemplateFormatVersion" : "2010-09-09",
-    "Description"              : "(000D) Use this template to Deploy SAP Business One on AWS. **NOTICE** This template creates Amazon EC2 Windows instance and related resources. You will be billed for the AWS resources used if you create a stack from this template.",
-    "Parameters"               : {
-        "VPCID" : {
-            "Type" : "AWS::EC2::VPC::Id",
-            "Description" : "VPC-ID of your existing Virtual Private Cloud (VPC) where you want to depoy SAP HANA.",
-            "Default"     : "vpc-xxxxxxxx",
-            "AllowedPattern" : "vpc-[0-9a-z]{8}"
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "(000D) Use this template to Deploy SAP Business One on AWS. **NOTICE** This template creates Amazon EC2 Windows instance and related resources. You will be billed for the AWS resources used if you create a stack from this template.",
+    "Parameters": {
+        "VPCID": {
+            "Type": "AWS::EC2::VPC::Id",
+            "Description": "VPC-ID of your existing Virtual Private Cloud (VPC) where you want to depoy SAP HANA.",
+            "Default": "vpc-xxxxxxxx",
+            "AllowedPattern": "vpc-[0-9a-z]{8}"
         },
-        "PrivSubCIDR" : {
-            "Description" : "CIDR Block for Private Subnet where SAP HANA will be deployed.",
-            "Type"        : "String",
-            "Default"     : "10.0.1.0/24",
-            "AllowedPattern" : "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})"
+        "PrivSubCIDR": {
+            "Description": "CIDR Block for Private Subnet where SAP HANA will be deployed.",
+            "Type": "String",
+            "Default": "10.0.1.0/24",
+            "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})"
         },
-        "DMZCIDR"     : {
-            "Description" : "CIDR Block for the Public DMZ Subnet located in the new VPC.",
-            "Type"        : "String",
-            "Default"     : "10.0.2.0/24",
-            "AllowedPattern" : "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})"
+        "DMZCIDR": {
+            "Description": "CIDR Block for the Public DMZ Subnet located in the new VPC.",
+            "Type": "String",
+            "Default": "10.0.2.0/24",
+            "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})"
         },
-        "HANASubnet"  : {
-            "Type" : "AWS::EC2::Subnet::Id",
-            "Description" : "Subnet-ID the existing subnet in your VPC where you want to deploy SAP HANA.",
-            "Default"     : "subnet-xxxxxxxx",
-            "AllowedPattern" : "subnet-[0-9a-z]{8}"
+        "HANASubnet": {
+            "Type": "AWS::EC2::Subnet::Id",
+            "Description": "Subnet-ID the existing subnet in your VPC where you want to deploy SAP HANA.",
+            "Default": "subnet-xxxxxxxx",
+            "AllowedPattern": "subnet-[0-9a-z]{8}"
         },
-        "SnapShotID"  : {
-            "Type" : "String",
-            "Description" : "SnapShot-ID of where your SAP Installation Media can be found (Requires DATA_UNITS Directory).",
-            "Default"     : "snap-xxxxxxxx",
-            "AllowedPattern" : "snap-[0-9a-z]{8}"
+        "SnapShotID": {
+            "Type": "String",
+            "Description": "SnapShot-ID of where your SAP Installation Media can be found (Requires DATA_UNITS Directory).",
+            "Default": "snap-xxxxxxxx",
+            "AllowedPattern": "snap-[0-9a-z]{8}"
         },
-        "DomainName"  : {
-            "Type" : "String",
-            "Description" : "Domain name to be used for fully qualified domain names.",
-            "Default"     : "local"
+        "DomainName": {
+            "Type": "String",
+            "Description": "Domain name to be used for fully qualified domain names.",
+            "Default": "local"
         },
-        "HANADBHostname" : {
-            "Type" : "String",
-            "Description" : "Hostname to be used for SAP HANA DB Host (DNS Shortname).",
-            "Default"     : "hanab1"
+        "HANADBHostname": {
+            "Type": "String",
+            "Description": "Hostname to be used for SAP HANA DB Host (DNS Shortname).",
+            "Default": "hanab1"
         },
-        "KeyName"            : {
-            "Type" : "AWS::EC2::KeyPair::KeyName",
-            "Description" : "Name of an existing EC2 KeyPair, all instances will launch with this KeyPair"
+        "KeyName": {
+            "Type": "AWS::EC2::KeyPair::KeyName",
+            "Description": "Name of an existing EC2 KeyPair, all instances will launch with this KeyPair"
         },
-        "MyRegionAMI"        : {
-            "Type" : "String",
-            "Description" : "Region specific AMI containing the OS image for Master/Worker nodes (SUSE 11.3 currently)",
-            "Default"     : "ami-xxxxxxxx"
+        "MyRegionAMI": {
+            "Type": "String",
+            "Description": "Region specific AMI containing the OS image for Master/Worker nodes (SUSE 11.3 currently)",
+            "Default": "ami-xxxxxxxx"
         },
-        "MyInstanceType"     : {
-            "Type" : "String",
-            "Default"     : "c3.8xlarge",
-            "Description" : "Instance Type of HANA host [r3.8xlarge/r3.4xlarge/r3.2xlarge/c3.8xlarge]",
-            "AllowedValues" : ["c3.8xlarge","r3.2xlarge","r3.4xlarge","r3.8xlarge"]
+        "MyInstanceType": {
+            "Type": "String",
+            "Default": "c3.8xlarge",
+            "Description": "Instance Type of HANA host [r3.8xlarge/r3.4xlarge/r3.2xlarge/c3.8xlarge]",
+            "AllowedValues": [
+                "c3.8xlarge",
+                "r3.2xlarge",
+                "r3.4xlarge",
+                "r3.8xlarge"
+            ]
         },
-        "WinInstanceType"     : {
-            "Type" : "String",
-            "Description" : "Instance Type of Windows Client",
-            "Default"     : "m3.large"
-        },       
-        "HANADBPass"     : {
-            "Type" : "String",
-            "Description" : "HANA DB Administrator Password - must be a minimum of 8 characters and include upper case, lower case and numeric values",
-            "NoEcho"      : "true",
-            "MinLength"   : "8",
-            "AllowedPattern" : "^(?=.*?[a-z])(?=.*?[A-Z])(?=.*[0-9]).*$",
-            "ConstraintDescription" : "The HANA password must be a minimum of 8 characters and include upper case, lower case and numeric values"
+        "WinInstanceType": {
+            "Type": "String",
+            "Description": "Instance Type of Windows Client",
+            "Default": "m3.large"
         },
-        "B1Pass"     : {
-            "Type" : "String",
-            "Description" : "Business One Administrator Password - must be a minimum of 8 characters and include upper case, lower case and numeric values",
-            "NoEcho"      : "true",
-            "MinLength"   : "8",
-            "AllowedPattern" : "^(?=.*?[a-z])(?=.*?[A-Z])(?=.*[0-9]).*$",
-            "ConstraintDescription" : "The Business One Server password must be a minimum of 8 characters and include upper case, lower case and numeric values"
-        },        
-        "B1Language"         : {
-            "Type" : "String",
-            "Default" : "EN",
-            "Description" : "Language of B1 Help",
-            "AllowedValues" : ["EN","DE","JA"]
+        "HANADBPass": {
+            "Type": "String",
+            "Description": "HANA DB Administrator Password - must be a minimum of 8 characters and include upper case, lower case and numeric values",
+            "NoEcho": "true",
+            "MinLength": "8",
+            "AllowedPattern": "^(?=.*?[a-z])(?=.*?[A-Z])(?=.*[0-9]).*$",
+            "ConstraintDescription": "The HANA password must be a minimum of 8 characters and include upper case, lower case and numeric values"
         },
-        "B1Country"          : {
-            "Type" : "String",
-            "Default" : "US",
-            "Description" : "Country of B1 Demo Database",
-            "AllowedValues" : ["US","CN","AU","IE","GB","NZ","JP","DE","IN"]
+        "B1Pass": {
+            "Type": "String",
+            "Description": "Business One Administrator Password - must be a minimum of 8 characters and include upper case, lower case and numeric values",
+            "NoEcho": "true",
+            "MinLength": "8",
+            "AllowedPattern": "^(?=.*?[a-z])(?=.*?[A-Z])(?=.*[0-9]).*$",
+            "ConstraintDescription": "The Business One Server password must be a minimum of 8 characters and include upper case, lower case and numeric values"
+        },
+        "B1Language": {
+            "Type": "String",
+            "Default": "EN",
+            "Description": "Language of B1 Help",
+            "AllowedValues": [
+                "EN",
+                "DE",
+                "JA"
+            ]
+        },
+        "B1Country": {
+            "Type": "String",
+            "Default": "US",
+            "Description": "Country of B1 Demo Database",
+            "AllowedValues": [
+                "US",
+                "CN",
+                "AU",
+                "IE",
+                "GB",
+                "NZ",
+                "JP",
+                "DE",
+                "IN"
+            ]
         },
         "B1Version": {
             "Type": "String",
             "Default": "910",
             "Description": "Version of B1 Software to Deploy",
-            "AllowedValues" : [
+            "AllowedValues": [
                 "910",
                 "900"
             ]
-        }        
+        }
     },
-    "Mappings"                 : {
-        "VolSize" : {
-            "c3.8xlarge" : {
-                "Size" : "300"
+    "Mappings": {
+        "VolSize": {
+            "c3.8xlarge": {
+                "Size": "300"
             },
-            "r3.2xlarge" : {
-                "Size" : "300"
+            "r3.2xlarge": {
+                "Size": "300"
             },
-            "r3.4xlarge" : {
-                "Size" : "300"
+            "r3.4xlarge": {
+                "Size": "300"
             },
-            "r3.8xlarge" : {
-                "Size" : "300"
+            "r3.8xlarge": {
+                "Size": "300"
             }
         },
-        "VolCount" : {
-            "c3.8xlarge" : {
-                "Size" : "3"
+        "VolCount": {
+            "c3.8xlarge": {
+                "Size": "3"
             },
-            "r3.2xlarge" : {
-                "Size" : "3"
+            "r3.2xlarge": {
+                "Size": "3"
             },
-            "r3.4xlarge" : {
-                "Size" : "3"
+            "r3.4xlarge": {
+                "Size": "3"
             },
-            "r3.8xlarge" : {
-                "Size" : "3"
+            "r3.8xlarge": {
+                "Size": "3"
             }
         },
-        "AWSInstanceType2Arch" : {
-            "m1.small" : {
-                "Arch" : "64"
+        "AWSWinRegionMap": {
+            "AMI": {
+                "Name": "Windows_Server-2012-R2_RTM-English-64Bit-Base-2016.04.13"
             },
-            "m1.medium" : {
-                "Arch" : "64"
+            "ap-northeast-1": {
+                "WS2012R2": "ami-ff435e91"
             },
-            "m1.large"  : {
-                "Arch" : "64"
+            "ap-northeast-2": {
+                "WS2012R2": "ami-c6de16a8"
             },
-            "m2.xlarge" : {
-                "Arch" : "64"
+            "ap-southeast-1": {
+                "WS2012R2": "ami-63489d00"
             },
-            "m2.2xlarge" : {
-                "Arch" : "64"
+            "ap-southeast-2": {
+                "WS2012R2": "ami-a1f7d5c2"
             },
-            "m2.4xlarge" : {
-                "Arch" : "64"
+            "eu-central-1": {
+                "WS2012R2": "ami-3acf2f55"
             },
-            "m3.xlarge"  : {
-                "Arch" : "64"
+            "eu-west-1": {
+                "WS2012R2": "ami-9ebb39ed"
             },
-            "m3.large"  : {
-                "Arch" : "64"
+            "sa-east-1": {
+                "WS2012R2": "ami-6efd7302"
             },
-            "c1.medium"  : {
-                "Arch" : "64"
+            "us-east-1": {
+                "WS2012R2": "ami-c8a9baa2"
             },
-            "c1.xlarge"  : {
-                "Arch" : "64"
+            "us-west-1": {
+                "WS2012R2": "ami-032f5063"
             },
-            "c3.2xlarge" : {
-                "Arch" : "64"
-            },
-            "c3.4xlarge" : {
-                "Arch" : "64"
-            }
-        },
-        "AWSRegionArch2AMI"    : {
-            "ap-northeast-1" : {
-                "64" : "ami-57282639"
-            },
-            "ap-southeast-1" : {
-                "64" : "ami-f8478f9b"
-            },
-            "ap-southeast-2" : {
-                "64" : "ami-1af6d779"
-            },
-            "eu-central-1" : {
-                "64" : "ami-1135d17e"
-            },
-            "eu-west-1" : {
-                "64" : "ami-c6972fb5"
-            },
-            "sa-east-1" : {
-                "64" : "ami-bdf974d1"
-            },
-            "us-east-1" : {
-                "64" : "ami-3d787d57"
-            },
-            "us-west-1" : {
-                "64" : "ami-df4437bf"
-            },
-            "us-west-2" : {
-                "64" : "ami-1719f677"
+            "us-west-2": {
+                "WS2012R2": "ami-87c037e7"
             }
         }
     },
-    "Resources"                : {
-        "SoftwareDepotVol" : {
-            "Type" : "AWS::EC2::Volume",
-            "Properties" : {
-                "Size" : "20",
-                "AvailabilityZone" : {
-                    "Fn::Select" : [
+    "Resources": {
+        "SoftwareDepotVol": {
+            "Type": "AWS::EC2::Volume",
+            "Properties": {
+                "Size": "20",
+                "AvailabilityZone": {
+                    "Fn::Select": [
                         0,
                         {
-                            "Fn::GetAZs" : ""
+                            "Fn::GetAZs": ""
                         }
                     ]
                 },
-                "SnapshotId"       : {
-                    "Ref" : "SnapShotID"
+                "SnapshotId": {
+                    "Ref": "SnapShotID"
                 },
-                "Tags"             : [
+                "Tags": [
                     {
-                        "Key" : "Name",
-                        "Value" : "SAP HANA Media Volume"
+                        "Key": "Name",
+                        "Value": "SAP HANA Media Volume"
                     }
                 ]
             }
         },
-        "SoftwareDepotVol2" : {
-            "Type" : "AWS::EC2::Volume",
-            "Properties" : {
-                "Size" : "60",
-                "AvailabilityZone" : {
-                    "Fn::Select" : [
+        "SoftwareDepotVol2": {
+            "Type": "AWS::EC2::Volume",
+            "Properties": {
+                "Size": "60",
+                "AvailabilityZone": {
+                    "Fn::Select": [
                         0,
                         {
-                            "Fn::GetAZs" : ""
+                            "Fn::GetAZs": ""
                         }
                     ]
                 },
-                "SnapshotId"       : {
-                    "Ref" : "SnapShotID"
+                "SnapshotId": {
+                    "Ref": "SnapShotID"
                 },
-                "Tags"             : [
+                "Tags": [
                     {
-                        "Key" : "Name",
-                        "Value" : "SAP HANA Media Volume"
+                        "Key": "Name",
+                        "Value": "SAP HANA Media Volume"
                     }
                 ]
             }
         },
-        "HANAMasterInterface" : {
-            "Type" : "AWS::EC2::NetworkInterface",
-            "Properties" : {
-                "Description" : "Network Interface for HANA Master",
-                "SubnetId"    : {
-                    "Ref" : "HANASubnet"
+        "HANAMasterInterface": {
+            "Type": "AWS::EC2::NetworkInterface",
+            "Properties": {
+                "Description": "Network Interface for HANA Master",
+                "SubnetId": {
+                    "Ref": "HANASubnet"
                 },
-                "GroupSet"    : [
+                "GroupSet": [
                     {
-                        "Ref" : "HANASecurityGroup"
+                        "Ref": "HANASecurityGroup"
                     }
                 ],
-                "SourceDestCheck" : "true",
-                "Tags"            : [
+                "SourceDestCheck": "true",
+                "Tags": [
                     {
-                        "Key" : "Network",
-                        "Value" : "Private"
+                        "Key": "Network",
+                        "Value": "Private"
                     }
                 ]
             }
         },
-        "HANASecurityGroup"   : {
-            "Type" : "AWS::EC2::SecurityGroup",
-            "Properties" : {
-                "GroupDescription" : "Enable external access to the HANA Master and allow communication from slave instances",
-                "VpcId"            : {
-                    "Ref" : "VPCID"
+        "HANASecurityGroup": {
+            "Type": "AWS::EC2::SecurityGroup",
+            "Properties": {
+                "GroupDescription": "Enable external access to the HANA Master and allow communication from slave instances",
+                "VpcId": {
+                    "Ref": "VPCID"
                 },
-                "SecurityGroupIngress" : [
+                "SecurityGroupIngress": [
                     {
-                        "IpProtocol" : "tcp",
-                        "CidrIp"     : {
-                            "Ref" : "PrivSubCIDR"
+                        "IpProtocol": "tcp",
+                        "CidrIp": {
+                            "Ref": "PrivSubCIDR"
                         },
-                        "FromPort"   : "1",
-                        "ToPort"     : "65535"
+                        "FromPort": "1",
+                        "ToPort": "65535"
                     },
                     {
-                        "IpProtocol" : "tcp",
-                        "CidrIp"     : {
-                            "Ref" : "PrivSubCIDR"
+                        "IpProtocol": "tcp",
+                        "CidrIp": {
+                            "Ref": "PrivSubCIDR"
                         },
-                        "FromPort"   : "111",
-                        "ToPort"     : "111"
+                        "FromPort": "111",
+                        "ToPort": "111"
                     },
                     {
-                        "IpProtocol" : "udp",
-                        "CidrIp"     : {
-                            "Ref" : "PrivSubCIDR"
+                        "IpProtocol": "udp",
+                        "CidrIp": {
+                            "Ref": "PrivSubCIDR"
                         },
-                        "FromPort"   : "111",
-                        "ToPort"     : "111"
+                        "FromPort": "111",
+                        "ToPort": "111"
                     },
                     {
-                        "IpProtocol" : "tcp",
-                        "CidrIp"     : {
-                            "Ref" : "PrivSubCIDR"
+                        "IpProtocol": "tcp",
+                        "CidrIp": {
+                            "Ref": "PrivSubCIDR"
                         },
-                        "FromPort"   : "2049",
-                        "ToPort"     : "2049"
+                        "FromPort": "2049",
+                        "ToPort": "2049"
                     },
                     {
-                        "IpProtocol" : "udp",
-                        "CidrIp"     : {
-                            "Ref" : "PrivSubCIDR"
+                        "IpProtocol": "udp",
+                        "CidrIp": {
+                            "Ref": "PrivSubCIDR"
                         },
-                        "FromPort"   : "2049",
-                        "ToPort"     : "2049"
+                        "FromPort": "2049",
+                        "ToPort": "2049"
                     },
                     {
-                        "IpProtocol" : "tcp",
-                        "CidrIp"     : {
-                            "Ref" : "PrivSubCIDR"
+                        "IpProtocol": "tcp",
+                        "CidrIp": {
+                            "Ref": "PrivSubCIDR"
                         },
-                        "FromPort"   : "4000",
-                        "ToPort"     : "4002"
+                        "FromPort": "4000",
+                        "ToPort": "4002"
                     },
                     {
-                        "IpProtocol" : "udp",
-                        "CidrIp"     : {
-                            "Ref" : "PrivSubCIDR"
+                        "IpProtocol": "udp",
+                        "CidrIp": {
+                            "Ref": "PrivSubCIDR"
                         },
-                        "FromPort"   : "4000",
-                        "ToPort"     : "4002"
+                        "FromPort": "4000",
+                        "ToPort": "4002"
                     },
                     {
-                        "IpProtocol" : "icmp",
-                        "CidrIp"     : {
-                            "Ref" : "PrivSubCIDR"
+                        "IpProtocol": "icmp",
+                        "CidrIp": {
+                            "Ref": "PrivSubCIDR"
                         },
-                        "FromPort"   : "-1",
-                        "ToPort"     : "-1"
+                        "FromPort": "-1",
+                        "ToPort": "-1"
                     },
                     {
-                        "IpProtocol" : "tcp",
-                        "CidrIp"     : {
-                            "Ref" : "DMZCIDR"
+                        "IpProtocol": "tcp",
+                        "CidrIp": {
+                            "Ref": "DMZCIDR"
                         },
-                        "FromPort"   : {
-                            "Fn::Join" : [
+                        "FromPort": {
+                            "Fn::Join": [
                                 "",
                                 [
                                     "5",
@@ -352,8 +339,8 @@
                                 ]
                             ]
                         },
-                        "ToPort"     : {
-                            "Fn::Join" : [
+                        "ToPort": {
+                            "Fn::Join": [
                                 "",
                                 [
                                     "5",
@@ -364,12 +351,12 @@
                         }
                     },
                     {
-                        "IpProtocol" : "tcp",
-                        "CidrIp"     : {
-                            "Ref" : "DMZCIDR"
+                        "IpProtocol": "tcp",
+                        "CidrIp": {
+                            "Ref": "DMZCIDR"
                         },
-                        "FromPort"   : {
-                            "Fn::Join" : [
+                        "FromPort": {
+                            "Fn::Join": [
                                 "",
                                 [
                                     "5",
@@ -378,8 +365,8 @@
                                 ]
                             ]
                         },
-                        "ToPort"     : {
-                            "Fn::Join" : [
+                        "ToPort": {
+                            "Fn::Join": [
                                 "",
                                 [
                                     "5",
@@ -390,12 +377,12 @@
                         }
                     },
                     {
-                        "IpProtocol" : "tcp",
-                        "CidrIp"     : {
-                            "Ref" : "DMZCIDR"
+                        "IpProtocol": "tcp",
+                        "CidrIp": {
+                            "Ref": "DMZCIDR"
                         },
-                        "FromPort"   : {
-                            "Fn::Join" : [
+                        "FromPort": {
+                            "Fn::Join": [
                                 "",
                                 [
                                     "3",
@@ -404,8 +391,8 @@
                                 ]
                             ]
                         },
-                        "ToPort"     : {
-                            "Fn::Join" : [
+                        "ToPort": {
+                            "Fn::Join": [
                                 "",
                                 [
                                     "3",
@@ -416,12 +403,12 @@
                         }
                     },
                     {
-                        "IpProtocol" : "tcp",
-                        "CidrIp"     : {
-                            "Ref" : "DMZCIDR"
+                        "IpProtocol": "tcp",
+                        "CidrIp": {
+                            "Ref": "DMZCIDR"
                         },
-                        "FromPort"   : {
-                            "Fn::Join" : [
+                        "FromPort": {
+                            "Fn::Join": [
                                 "",
                                 [
                                     "3",
@@ -430,8 +417,8 @@
                                 ]
                             ]
                         },
-                        "ToPort"     : {
-                            "Fn::Join" : [
+                        "ToPort": {
+                            "Fn::Join": [
                                 "",
                                 [
                                     "3",
@@ -466,14 +453,14 @@
                                 ]
                             ]
                         }
-                    },                                                            
+                    },
                     {
-                        "IpProtocol" : "tcp",
-                        "CidrIp"     : {
-                            "Ref" : "DMZCIDR"
+                        "IpProtocol": "tcp",
+                        "CidrIp": {
+                            "Ref": "DMZCIDR"
                         },
-                        "FromPort"   : {
-                            "Fn::Join" : [
+                        "FromPort": {
+                            "Fn::Join": [
                                 "",
                                 [
                                     "80",
@@ -482,8 +469,8 @@
                                 ]
                             ]
                         },
-                        "ToPort"     : {
-                            "Fn::Join" : [
+                        "ToPort": {
+                            "Fn::Join": [
                                 "",
                                 [
                                     "80",
@@ -494,12 +481,12 @@
                         }
                     },
                     {
-                        "IpProtocol" : "tcp",
-                        "CidrIp"     : {
-                            "Ref" : "DMZCIDR"
+                        "IpProtocol": "tcp",
+                        "CidrIp": {
+                            "Ref": "DMZCIDR"
                         },
-                        "FromPort"   : {
-                            "Fn::Join" : [
+                        "FromPort": {
+                            "Fn::Join": [
                                 "",
                                 [
                                     "3",
@@ -508,8 +495,8 @@
                                 ]
                             ]
                         },
-                        "ToPort"     : {
-                            "Fn::Join" : [
+                        "ToPort": {
+                            "Fn::Join": [
                                 "",
                                 [
                                     "3",
@@ -520,12 +507,12 @@
                         }
                     },
                     {
-                        "IpProtocol" : "tcp",
-                        "CidrIp"     : {
-                            "Ref" : "DMZCIDR"
+                        "IpProtocol": "tcp",
+                        "CidrIp": {
+                            "Ref": "DMZCIDR"
                         },
-                        "FromPort"   : {
-                            "Fn::Join" : [
+                        "FromPort": {
+                            "Fn::Join": [
                                 "",
                                 [
                                     "43",
@@ -534,8 +521,8 @@
                                 ]
                             ]
                         },
-                        "ToPort"     : {
-                            "Fn::Join" : [
+                        "ToPort": {
+                            "Fn::Join": [
                                 "",
                                 [
                                     "43",
@@ -546,100 +533,100 @@
                         }
                     },
                     {
-                        "IpProtocol" : "tcp",
-                        "CidrIp"     : {
-                            "Ref" : "DMZCIDR"
+                        "IpProtocol": "tcp",
+                        "CidrIp": {
+                            "Ref": "DMZCIDR"
                         },
-                        "FromPort"   : "8080",
-                        "ToPort"     : "8080"
+                        "FromPort": "8080",
+                        "ToPort": "8080"
                     },
                     {
-                        "IpProtocol" : "tcp",
-                        "CidrIp"     : {
-                            "Ref" : "DMZCIDR"
+                        "IpProtocol": "tcp",
+                        "CidrIp": {
+                            "Ref": "DMZCIDR"
                         },
-                        "FromPort"   : "8443",
-                        "ToPort"     : "8443"
+                        "FromPort": "8443",
+                        "ToPort": "8443"
                     },
                     {
-                        "IpProtocol" : "tcp",
-                        "CidrIp"     : {
-                            "Ref" : "DMZCIDR"
+                        "IpProtocol": "tcp",
+                        "CidrIp": {
+                            "Ref": "DMZCIDR"
                         },
-                        "FromPort"   : "1128",
-                        "ToPort"     : "1128"
+                        "FromPort": "1128",
+                        "ToPort": "1128"
                     },
                     {
-                        "IpProtocol" : "tcp",
-                        "CidrIp"     : {
-                            "Ref" : "DMZCIDR"
+                        "IpProtocol": "tcp",
+                        "CidrIp": {
+                            "Ref": "DMZCIDR"
                         },
-                        "FromPort"   : "1129",
-                        "ToPort"     : "1129"
+                        "FromPort": "1129",
+                        "ToPort": "1129"
                     },
                     {
-                        "IpProtocol" : "tcp",
-                        "CidrIp"     : {
-                            "Ref" : "DMZCIDR"
+                        "IpProtocol": "tcp",
+                        "CidrIp": {
+                            "Ref": "DMZCIDR"
                         },
-                        "FromPort"   : "22",
-                        "ToPort"     : "22"
+                        "FromPort": "22",
+                        "ToPort": "22"
                     }
                 ],
-                "SecurityGroupEgress"  : [
+                "SecurityGroupEgress": [
                     {
-                        "IpProtocol" : "-1",
-                        "CidrIp"     : "0.0.0.0/0",
-                        "FromPort"   : "1",
-                        "ToPort"     : "65535"
+                        "IpProtocol": "-1",
+                        "CidrIp": "0.0.0.0/0",
+                        "FromPort": "1",
+                        "ToPort": "65535"
                     }
                 ]
             }
         },
-        "WinSecurityGroup"                 : {
-            "Type" : "AWS::EC2::SecurityGroup",
-            "Properties" : {
-                "GroupDescription" : "Security Group for Windows Client",
-                "VpcId"            : {
-                    "Ref" : "VPCID"
+        "WinSecurityGroup": {
+            "Type": "AWS::EC2::SecurityGroup",
+            "Properties": {
+                "GroupDescription": "Security Group for Windows Client",
+                "VpcId": {
+                    "Ref": "VPCID"
                 },
-                "SecurityGroupIngress" : [
+                "SecurityGroupIngress": [
                     {
-                        "IpProtocol" : "-1",
-                        "FromPort"   : "1",
-                        "ToPort"     : "65535",
-                        "CidrIp"     : "0.0.0.0/0"
+                        "IpProtocol": "-1",
+                        "FromPort": "1",
+                        "ToPort": "65535",
+                        "CidrIp": "0.0.0.0/0"
                     }
                 ]
             }
         },
-        "HANAIAMRole"         : {
-            "Type" : "AWS::IAM::Role",
-            "Properties" : {
-                "AssumeRolePolicyDocument" : {
-                    "Statement" : [
+        "HANAIAMRole": {
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+                "AssumeRolePolicyDocument": {
+                    "Statement": [
                         {
-                            "Effect" : "Allow",
-                            "Principal" : {
-                                "Service" : [
+                            "Effect": "Allow",
+                            "Principal": {
+                                "Service": [
                                     "ec2.amazonaws.com"
                                 ]
                             },
-                            "Action"    : [
+                            "Action": [
                                 "sts:AssumeRole"
                             ]
                         }
                     ]
                 },
-                "Path"                     : "/",
-                "Policies"                 : [
+                "Path": "/",
+                "Policies": [
                     {
-                        "PolicyName" : "HANA-Backup",
-                        "PolicyDocument" : {
-                            "Statement" : [
+                        "PolicyName": "HANA-Backup",
+                        "PolicyDocument": {
+                            "Statement": [
                                 {
-                                    "Effect" : "Allow",
-                                    "Action" : [
+                                    "Effect": "Allow",
+                                    "Action": [
                                         "s3:*",
                                         "ec2:Describe*",
                                         "ec2:AttachNetworkInterface",
@@ -652,11 +639,11 @@
                                         "ec2:CreateSecurityGroup",
                                         "ec2:CreateSnapshot"
                                     ],
-                                    "Resource" : "*"
+                                    "Resource": "*"
                                 },
                                 {
-                                    "Effect" : "Allow",
-                                    "Action" : [
+                                    "Effect": "Allow",
+                                    "Action": [
                                         "dynamodb:*",
                                         "dynamodb:Scan",
                                         "dynamodb:Query",
@@ -664,7 +651,7 @@
                                         "dynamodb:BatchGetItem",
                                         "dynamodb:UpdateTable"
                                     ],
-                                    "Resource" : [
+                                    "Resource": [
                                         "*"
                                     ]
                                 }
@@ -674,160 +661,158 @@
                 ]
             }
         },
-        "HANAIAMProfile"      : {
-            "Type" : "AWS::IAM::InstanceProfile",
-            "Properties" : {
-                "Path" : "/",
-                "Roles" : [
+        "HANAIAMProfile": {
+            "Type": "AWS::IAM::InstanceProfile",
+            "Properties": {
+                "Path": "/",
+                "Roles": [
                     {
-                        "Ref" : "HANAIAMRole"
+                        "Ref": "HANAIAMRole"
                     }
                 ]
             }
         },
-        "WaitForHANAInstall"  : {
-            "Type" : "AWS::CloudFormation::WaitCondition",
-            "DependsOn" : "HANAMasterInstance",
-            "Properties" : {
-                "Handle" : {
-                    "Ref" : "WaitForMasterInstallWaitHandle"
+        "WaitForHANAInstall": {
+            "Type": "AWS::CloudFormation::WaitCondition",
+            "DependsOn": "HANAMasterInstance",
+            "Properties": {
+                "Handle": {
+                    "Ref": "WaitForMasterInstallWaitHandle"
                 },
-                "Timeout" : "7200"
+                "Timeout": "7200"
             }
         },
-        "WaitForMasterInstallWaitHandle" : {
-            "Type" : "AWS::CloudFormation::WaitConditionHandle",
-            "Properties" : {
-            }
+        "WaitForMasterInstallWaitHandle": {
+            "Type": "AWS::CloudFormation::WaitConditionHandle",
+            "Properties": {}
         },
-        "WINClientCondition" : {
-            "Type" : "AWS::CloudFormation::WaitCondition",
-            "DependsOn" : "WINClient",
-            "Properties" : {
-                "Handle" : {
-                    "Ref" : "WINClientWaitHandle"
+        "WINClientCondition": {
+            "Type": "AWS::CloudFormation::WaitCondition",
+            "DependsOn": "WINClient",
+            "Properties": {
+                "Handle": {
+                    "Ref": "WINClientWaitHandle"
                 },
-                "Timeout" : "1800"
+                "Timeout": "1800"
             }
         },
-        "WINClientWaitHandle"    : {
-            "Type" : "AWS::CloudFormation::WaitConditionHandle"
+        "WINClientWaitHandle": {
+            "Type": "AWS::CloudFormation::WaitConditionHandle"
         },
-        "HANAMasterInstance"             : {
-            "Type" : "AWS::EC2::Instance",
-            "Metadata" : {
-                "HostRole" : "Master"
+        "HANAMasterInstance": {
+            "Type": "AWS::EC2::Instance",
+            "Metadata": {
+                "HostRole": "Master"
             },
-            "Properties" : {
-                "NetworkInterfaces" : [
+            "Properties": {
+                "NetworkInterfaces": [
                     {
-                        "NetworkInterfaceId" : {
-                            "Ref" : "HANAMasterInterface"
+                        "NetworkInterfaceId": {
+                            "Ref": "HANAMasterInterface"
                         },
-                        "DeviceIndex"        : "0"
+                        "DeviceIndex": "0"
                     }
                 ],
-                "KeyName"            : {
-                    "Ref" : "KeyName"
+                "KeyName": {
+                    "Ref": "KeyName"
                 },
-                "ImageId"            : {
-                    "Ref" : "MyRegionAMI"
+                "ImageId": {
+                    "Ref": "MyRegionAMI"
                 },
-                "IamInstanceProfile" : {
-                    "Ref" : "HANAIAMProfile"
+                "IamInstanceProfile": {
+                    "Ref": "HANAIAMProfile"
                 },
-                "Tags"               : [
+                "Tags": [
                     {
-                        "Key" : "Name",
-                        "Value" : "SAP HANA Master"
+                        "Key": "Name",
+                        "Value": "SAP HANA Master"
                     }
                 ],
-                "Volumes"            : [
+                "Volumes": [
                     {
-                        "VolumeId" : {
-                            "Ref" : "SoftwareDepotVol"
+                        "VolumeId": {
+                            "Ref": "SoftwareDepotVol"
                         },
-                        "Device"   : "/dev/sdz"
+                        "Device": "/dev/sdz"
                     }
                 ],
-                "BlockDeviceMappings" : [
+                "BlockDeviceMappings": [
                     {
-                        "DeviceName" : "/dev/sdb",
-                        "Ebs"        : {
-                            "VolumeSize" : {
-                                "Fn::FindInMap" : [
+                        "DeviceName": "/dev/sdb",
+                        "Ebs": {
+                            "VolumeSize": {
+                                "Fn::FindInMap": [
                                     "VolSize",
                                     {
-                                        "Ref" : "MyInstanceType"
+                                        "Ref": "MyInstanceType"
                                     },
                                     "Size"
                                 ]
                             },
-                            "VolumeType" : "gp2",
-                            "DeleteOnTermination" : "true"
+                            "VolumeType": "gp2",
+                            "DeleteOnTermination": "true"
                         }
                     },
                     {
-                        "DeviceName" : "/dev/sdc",
-                        "Ebs"        : {
-                            "VolumeSize" : {
-                                "Fn::FindInMap" : [
+                        "DeviceName": "/dev/sdc",
+                        "Ebs": {
+                            "VolumeSize": {
+                                "Fn::FindInMap": [
                                     "VolSize",
                                     {
-                                        "Ref" : "MyInstanceType"
+                                        "Ref": "MyInstanceType"
                                     },
                                     "Size"
                                 ]
                             },
-                            "VolumeType" : "gp2",
-                            "DeleteOnTermination" : "true"
+                            "VolumeType": "gp2",
+                            "DeleteOnTermination": "true"
                         }
                     },
                     {
-                        "DeviceName" : "/dev/sdd",
-                        "Ebs"        : {
-                            "VolumeSize" : {
-                                "Fn::FindInMap" : [
+                        "DeviceName": "/dev/sdd",
+                        "Ebs": {
+                            "VolumeSize": {
+                                "Fn::FindInMap": [
                                     "VolSize",
                                     {
-                                        "Ref" : "MyInstanceType"
+                                        "Ref": "MyInstanceType"
                                     },
                                     "Size"
                                 ]
                             },
-                            "VolumeType" : "gp2",
-                            "DeleteOnTermination" : "true"
+                            "VolumeType": "gp2",
+                            "DeleteOnTermination": "true"
                         }
                     },
                     {
-                        "DeviceName" : "/dev/sde",
-                        "Ebs"        : {
-                            "VolumeSize" :"250",
-                            "VolumeType" : "gp2",
-                            "DeleteOnTermination" : "true"
+                        "DeviceName": "/dev/sde",
+                        "Ebs": {
+                            "VolumeSize": "250",
+                            "VolumeType": "gp2",
+                            "DeleteOnTermination": "true"
                         }
                     },
                     {
-                        "DeviceName" : "/dev/sdf",
-                        "Ebs"        : {
-                            "VolumeSize" :"250",
-                            "VolumeType" : "gp2",
-                            "DeleteOnTermination" : "true"
+                        "DeviceName": "/dev/sdf",
+                        "Ebs": {
+                            "VolumeSize": "250",
+                            "VolumeType": "gp2",
+                            "DeleteOnTermination": "true"
                         }
                     },
-
                     {
-                        "DeviceName" : "/dev/sds",
-                        "Ebs"        : {
-                            "VolumeType" : "gp2",
-                            "DeleteOnTermination" : "true",
-                            "VolumeSize"          : "50"
+                        "DeviceName": "/dev/sds",
+                        "Ebs": {
+                            "VolumeType": "gp2",
+                            "DeleteOnTermination": "true",
+                            "VolumeSize": "50"
                         }
                     }
                 ],
-                "UserData"            : {
-                    "Fn::Base64" : {
-                        "Fn::Join" : [
+                "UserData": {
+                    "Fn::Base64": {
+                        "Fn::Join": [
                             "",
                             [
                                 "#!/bin/bash -xv\n",
@@ -837,19 +822,19 @@
                                 "exec 3>&1 1>>/root/install/misc.log 2>&1 \n",
                                 "hostname ",
                                 {
-                                    "Ref" : "HANADBHostname"
+                                    "Ref": "HANADBHostname"
                                 },
                                 "\n",
                                 "echo ",
                                 {
-                                    "Fn::Join" : [
+                                    "Fn::Join": [
                                         ".",
                                         [
                                             {
-                                                "Ref" : "HANADBHostname"
+                                                "Ref": "HANADBHostname"
                                             },
                                             {
-                                                "Ref" : "DomainName"
+                                                "Ref": "DomainName"
                                             }
                                         ]
                                     ]
@@ -862,12 +847,12 @@
                                 "chmod 755 /root/install/*.py\n",
                                 "echo ",
                                 {
-                                    "Fn::Join" : [
+                                    "Fn::Join": [
                                         "_",
                                         [
                                             "export TABLE_NAME=HANAMonitor_",
                                             {
-                                                "Ref" : "AWS::StackName"
+                                                "Ref": "AWS::StackName"
                                             }
                                         ]
                                     ]
@@ -875,17 +860,17 @@
                                 " >> /root/install/config.sh\n",
                                 "echo ",
                                 {
-                                    "Fn::Join" : [
+                                    "Fn::Join": [
                                         "",
                                         [
                                             "export AVAILABILITY_ZONE=",
                                             {
-												"Fn::Select" : [
-													0,
-													{
-														"Fn::GetAZs" : ""
-													}
-												]
+                                                "Fn::Select": [
+                                                    0,
+                                                    {
+                                                        "Fn::GetAZs": ""
+                                                    }
+                                                ]
                                             }
                                         ]
                                     ]
@@ -893,12 +878,12 @@
                                 " >> /root/install/config.sh\n",
                                 "echo ",
                                 {
-                                    "Fn::Join" : [
+                                    "Fn::Join": [
                                         "",
                                         [
                                             "export REGION=",
                                             {
-                                                "Ref" : "AWS::Region"
+                                                "Ref": "AWS::Region"
                                             }
                                         ]
                                     ]
@@ -911,7 +896,7 @@
                                 "\"",
                                 "DomainName=",
                                 {
-                                    "Ref" : "DomainName"
+                                    "Ref": "DomainName"
                                 },
                                 "\"",
                                 "\n",
@@ -919,7 +904,7 @@
                                 "\"",
                                 "MyHostname=",
                                 {
-                                    "Ref" : "HANADBHostname"
+                                    "Ref": "HANADBHostname"
                                 },
                                 "\"",
                                 "\n",
@@ -952,32 +937,32 @@
                                 "00",
                                 " -p ",
                                 {
-                                    "Ref" : "HANADBPass"
+                                    "Ref": "HANADBPass"
                                 },
                                 " -b ",
                                 {
-                                    "Ref" : "B1Pass"
+                                    "Ref": "B1Pass"
                                 },
                                 " -n ",
                                 {
-                                    "Ref" : "HANADBHostname"
+                                    "Ref": "HANADBHostname"
                                 },
                                 " -d ",
                                 {
-                                    "Ref" : "DomainName"
+                                    "Ref": "DomainName"
                                 },
                                 " -g ",
                                 {
-                                    "Ref" : "B1Language"
+                                    "Ref": "B1Language"
                                 },
                                 " -c ",
                                 {
-                                    "Ref" : "B1Country"
+                                    "Ref": "B1Country"
                                 },
                                 " -v ",
                                 {
-                                    "Ref" : "B1Version"
-                                },               
+                                    "Ref": "B1Version"
+                                },
                                 "\n",
                                 "sh /root/install/cluster-watch-engine.sh -s \"MASTER_NODE_COMPLETE\"\n",
                                 "sh /root/install/wait-for-workers.sh ",
@@ -987,7 +972,7 @@
                                 "\n",
                                 "sh /root/install/signal-complete.sh \"",
                                 {
-                                    "Ref" : "WaitForMasterInstallWaitHandle"
+                                    "Ref": "WaitForMasterInstallWaitHandle"
                                 },
                                 "\" \n",
                                 "' ",
@@ -996,46 +981,46 @@
                         ]
                     }
                 },
-                "InstanceType"        : {
-                    "Ref" : "MyInstanceType"
+                "InstanceType": {
+                    "Ref": "MyInstanceType"
                 }
             }
         },
-        "WINClient"                      : {
-            "Type" : "AWS::EC2::Instance",
-			"DependsOn": "WaitForHANAInstall",
-            "Metadata" : {
-                "AWS::CloudFormation::Init" : {
-                    "configSets" : {
-                        "config" : [
+        "WINClient": {
+            "Type": "AWS::EC2::Instance",
+            "DependsOn": "WaitForHANAInstall",
+            "Metadata": {
+                "AWS::CloudFormation::Init": {
+                    "configSets": {
+                        "config": [
                             "setup"
                         ]
                     },
-                    "setup"      : {
-                        "files" : {
-                            "c:\\cfn\\cfn-hup.conf" : {
-                                "content" : {
-                                    "Fn::Join" : [
+                    "setup": {
+                        "files": {
+                            "c:\\cfn\\cfn-hup.conf": {
+                                "content": {
+                                    "Fn::Join": [
                                         "",
                                         [
                                             "[main]\n",
                                             "stack=",
                                             {
-                                                "Ref" : "AWS::StackName"
+                                                "Ref": "AWS::StackName"
                                             },
                                             "\n",
                                             "region=",
                                             {
-                                                "Ref" : "AWS::Region"
+                                                "Ref": "AWS::Region"
                                             },
                                             "\n"
                                         ]
                                     ]
                                 }
                             },
-                            "c:\\cfn\\hooks.d\\cfn-auto-reloader.conf" : {
-                                "content" : {
-                                    "Fn::Join" : [
+                            "c:\\cfn\\hooks.d\\cfn-auto-reloader.conf": {
+                                "content": {
+                                    "Fn::Join": [
                                         "",
                                         [
                                             "[cfn-auto-reloader-hook]\n",
@@ -1043,52 +1028,52 @@
                                             "path=Resources.WINClient.Metadata.AWS::CloudFormation::Init\n",
                                             "action=cfn-init.exe -v -c config -s ",
                                             {
-                                                "Ref" : "AWS::StackId"
+                                                "Ref": "AWS::StackId"
                                             },
                                             " -r WINClient",
                                             " --region ",
                                             {
-                                                "Ref" : "AWS::Region"
+                                                "Ref": "AWS::Region"
                                             },
                                             "\n"
                                         ]
                                     ]
                                 }
                             },
-                            "c:\\cfn\\scripts\\Unzip-Archive.ps1"      : {
-                                "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/utilities/latest/scripts/Unzip-Archive.ps1"
+                            "c:\\cfn\\scripts\\Unzip-Archive.ps1": {
+                                "source": "https://s3.amazonaws.com/quickstart-reference/microsoft/utilities/latest/scripts/Unzip-Archive.ps1"
                             },
-                            "c:\\cfn\\modules\\AWSQuickStart.zip"      : {
-                                "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/utilities/latest/modules/AWSQuickStart.zip"
+                            "c:\\cfn\\modules\\AWSQuickStart.zip": {
+                                "source": "https://s3.amazonaws.com/quickstart-reference/microsoft/utilities/latest/modules/AWSQuickStart.zip"
                             },
-                            "c:\\cfn\\scripts\\CreateWaitHandle.ps1"   : {
-                                "source" : "https://s3.amazonaws.com/quickstart-reference/microsoft/utilities/latest/scripts/CreateWaitHandle.ps1"
+                            "c:\\cfn\\scripts\\CreateWaitHandle.ps1": {
+                                "source": "https://s3.amazonaws.com/quickstart-reference/microsoft/utilities/latest/scripts/CreateWaitHandle.ps1"
                             },
-                            "c:\\cfn\\scripts\\Install-SAP.ps1"    : {
-                                "source" : "https://s3.amazonaws.com/quickstart-reference/sap/B1/latest/scripts/Install-SAP.ps1"
+                            "c:\\cfn\\scripts\\Install-SAP.ps1": {
+                                "source": "https://s3.amazonaws.com/quickstart-reference/sap/B1/latest/scripts/Install-SAP.ps1"
                             },
-                            "c:\\cfn\\scripts\\Initialize-SAPInstall.ps1"    : {
-                                "source" : "https://s3.amazonaws.com/quickstart-reference/sap/B1/latest/scripts/Initialize-SAPInstall.ps1"
+                            "c:\\cfn\\scripts\\Initialize-SAPInstall.ps1": {
+                                "source": "https://s3.amazonaws.com/quickstart-reference/sap/B1/latest/scripts/Initialize-SAPInstall.ps1"
                             },
-                            "c:\\cfn\\scripts\\Install-SAPBits.bat"        : {
-                                "content" : {
-                                    "Fn::Join" : [
+                            "c:\\cfn\\scripts\\Install-SAPBits.bat": {
+                                "content": {
+                                    "Fn::Join": [
                                         "",
                                         [
                                             "powershell.exe -ExecutionPolicy RemoteSigned -Command c:\\cfn\\scripts\\Install-SAP.ps1 -ServerName ",
                                             {
-                                                "Ref" : "HANADBHostname"
+                                                "Ref": "HANADBHostname"
                                             },
                                             " -ServerIP ",
                                             {
-												"Fn::GetAtt" : [
-													"HANAMasterInstance",
-													"PrivateIp"
-												]
+                                                "Fn::GetAtt": [
+                                                    "HANAMasterInstance",
+                                                    "PrivateIp"
+                                                ]
                                             },
-											" -B1Version ",
+                                            " -B1Version ",
                                             {
-                                                "Ref" : "B1Version"
+                                                "Ref": "B1Version"
                                             },
                                             "\n"
                                         ]
@@ -1096,26 +1081,26 @@
                                 }
                             }
                         },
-                        "services" : {
-                            "windows" : {
-                                "cfn-hup" : {
-                                    "enabled" : "true",
-                                    "ensureRunning" : "true",
-                                    "files"         : [
+                        "services": {
+                            "windows": {
+                                "cfn-hup": {
+                                    "enabled": "true",
+                                    "ensureRunning": "true",
+                                    "files": [
                                         "c:\\cfn\\cfn-hup.conf",
                                         "c:\\cfn\\hooks.d\\cfn-auto-reloader.conf"
                                     ]
                                 }
                             }
                         },
-                        "commands" : {
-                            "a-set-execution-policy" : {
-                                "command" : "powershell.exe -command Set-ExecutionPolicy RemoteSigned -Force",
-                                "waitAfterCompletion" : "0"
+                        "commands": {
+                            "a-set-execution-policy": {
+                                "command": "powershell.exe -command Set-ExecutionPolicy RemoteSigned -Force",
+                                "waitAfterCompletion": "0"
                             },
-                            "b-bring-volume-online" : {
-                                "command" : {
-                                    "Fn::Join" : [
+                            "b-bring-volume-online": {
+                                "command": {
+                                    "Fn::Join": [
                                         "",
                                         [
                                             "powershell.exe -Command \"Get-Disk | Where-Object {$_.IsOffline -eq $true} | Set-Disk -IsOffline $false\""
@@ -1123,110 +1108,104 @@
                                     ]
                                 }
                             },
-                            "b-unpack-quickstart-module" : {
-                                "command" : "powershell.exe -command c:\\cfn\\scripts\\Unzip-Archive.ps1 -Source c:\\cfn\\modules\\AWSQuickStart.zip -Destination C:\\Windows\\system32\\WindowsPowerShell\\v1.0\\Modules\\",
-                                "waitAfterCompletion" : "0"
+                            "b-unpack-quickstart-module": {
+                                "command": "powershell.exe -command c:\\cfn\\scripts\\Unzip-Archive.ps1 -Source c:\\cfn\\modules\\AWSQuickStart.zip -Destination C:\\Windows\\system32\\WindowsPowerShell\\v1.0\\Modules\\",
+                                "waitAfterCompletion": "0"
                             },
-                            "c-create-waithandle"        : {
-                                "command" : {
-                                    "Fn::Join" : [
+                            "c-create-waithandle": {
+                                "command": {
+                                    "Fn::Join": [
                                         "",
                                         [
                                             "powershell.exe -command \"c:\\cfn\\scripts\\CreateWaitHandle.ps1 -Handle '",
                                             {
-                                                "Ref" : "WINClientWaitHandle"
+                                                "Ref": "WINClientWaitHandle"
                                             },
                                             "'\""
                                         ]
                                     ]
                                 },
-                                "waitAfterCompletion" : "0"
+                                "waitAfterCompletion": "0"
                             },
-                            "c-init-install" : {
-                                "command" : {
-                                    "Fn::Join" : [
+                            "c-init-install": {
+                                "command": {
+                                    "Fn::Join": [
                                         "",
                                         [
                                             "powershell.exe -Command c:\\cfn\\scripts\\Initialize-SAPInstall.ps1 -Password ",
                                             {
-                                                "Ref" : "B1Pass"
+                                                "Ref": "B1Pass"
                                             }
                                         ]
                                     ]
                                 },
-								"waitAfterCompletion" : "forever"
+                                "waitAfterCompletion": "forever"
                             }
                         }
                     }
                 }
             },
-            "Properties" : {
-                "ImageId" : {
-                    "Fn::FindInMap" : [
-                        "AWSRegionArch2AMI",
+            "Properties": {
+                "ImageId": {
+                    "Fn::FindInMap": [
+                        "AWSWinRegionMap",
                         {
-                            "Ref" : "AWS::Region"
+                            "Ref": "AWS::Region"
                         },
-                        {
-                            "Fn::FindInMap" : [
-                                "AWSInstanceType2Arch",
-                                {
-                                    "Ref" : "WinInstanceType"
-                                },
-                                "Arch"
-                            ]
-                        }
+                        "WS2012R2"
                     ]
                 },
-                "InstanceType" : {"Ref" : "WinInstanceType"},
-                "SubnetId"     : {
-                    "Ref" : "HANASubnet"
+                "InstanceType": {
+                    "Ref": "WinInstanceType"
                 },
-                "Tags"         : [
+                "SubnetId": {
+                    "Ref": "HANASubnet"
+                },
+                "Tags": [
                     {
-                        "Key" : "Name",
-                        "Value" : "WINClient"
+                        "Key": "Name",
+                        "Value": "WINClient"
                     }
                 ],
-                "BlockDeviceMappings" : [
+                "BlockDeviceMappings": [
                     {
-                        "DeviceName" : "/dev/sda1",
-                        "Ebs"        : {
-                            "VolumeSize" : "100",
-                            "VolumeType" : "gp2"
+                        "DeviceName": "/dev/sda1",
+                        "Ebs": {
+                            "VolumeSize": "100",
+                            "VolumeType": "gp2"
                         }
                     }
                 ],
-                "Volumes"             : [
+                "Volumes": [
                     {
-                        "VolumeId" : {
-                            "Ref" : "SoftwareDepotVol2"
+                        "VolumeId": {
+                            "Ref": "SoftwareDepotVol2"
                         },
-                        "Device"   : "/dev/xvdf"
+                        "Device": "/dev/xvdf"
                     }
                 ],
-                "SecurityGroupIds"    : [
+                "SecurityGroupIds": [
                     {
-                        "Ref" : "WinSecurityGroup"
+                        "Ref": "WinSecurityGroup"
                     }
                 ],
-                "KeyName"             : {
-                    "Ref" : "KeyName"
+                "KeyName": {
+                    "Ref": "KeyName"
                 },
-                "UserData"            : {
-                    "Fn::Base64" : {
-                        "Fn::Join" : [
+                "UserData": {
+                    "Fn::Base64": {
+                        "Fn::Join": [
                             "",
                             [
                                 "<script>\n",
                                 "cfn-init.exe -v -c config -s ",
                                 {
-                                    "Ref" : "AWS::StackId"
+                                    "Ref": "AWS::StackId"
                                 },
                                 " -r WINClient",
                                 " --region ",
                                 {
-                                    "Ref" : "AWS::Region"
+                                    "Ref": "AWS::Region"
                                 },
                                 "\n",
                                 "</script>\n"
@@ -1237,20 +1216,20 @@
             }
         }
     },
-    "Outputs"                  : {
-        "HANAMasterInstanceIP" : {
-            "Description" : "HANA Master Node IP Address",
-            "Value"       : {
-                "Fn::GetAtt" : [
+    "Outputs": {
+        "HANAMasterInstanceIP": {
+            "Description": "HANA Master Node IP Address",
+            "Value": {
+                "Fn::GetAtt": [
                     "HANAMasterInstance",
                     "PrivateIp"
                 ]
             }
         },
-        "HANAMasterSecurityGroup" : {
-            "Description" : "Security Group created for the SAP HANA Master node",
-            "Value"       : {
-                "Fn::GetAtt" : [
+        "HANAMasterSecurityGroup": {
+            "Description": "Security Group created for the SAP HANA Master node",
+            "Value": {
+                "Fn::GetAtt": [
                     "HANASecurityGroup",
                     "GroupId"
                 ]

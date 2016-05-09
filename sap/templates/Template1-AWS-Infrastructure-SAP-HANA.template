@@ -30,7 +30,7 @@
             "ConstraintDescription": "must be a valid CIDR range of the form x.x.x.x/x."
         },
         "KeyName": {
-            "Type": "String",
+            "Type": "AWS::EC2::KeyPair::KeyName",
             "Description": "Name of an existing EC2 KeyPair. RDP instance will launch with this KeyPair."
         },
         "NATInstanceType": {
@@ -57,26 +57,68 @@
     },
     "Mappings": {
         "AWSNATAMI": {
-		"us-west-2": {"AMI":"ami-bb69128b"},
-		"sa-east-1": {"AMI":"ami-b972dba4"},
-		"ap-northeast-1": {"AMI":"ami-55c29e54"},
-		"eu-west-1": {"AMI":"ami-5b60b02c"},
-		"us-east-1": {"AMI":"ami-6e9e4b06"},
-		"us-west-1": {"AMI":"ami-2b2b296e"},
-		"ap-southeast-2": {"AMI":"ami-a164029b"},
-		"ap-southeast-1": {"AMI":"ami-d482da86"},
-		"eu-central-1": {"AMI":"ami-ae380eb3"}
+            "us-west-2": {
+                "AMI": "ami-bb69128b"
+            },
+            "sa-east-1": {
+                "AMI": "ami-b972dba4"
+            },
+            "ap-northeast-1": {
+                "AMI": "ami-55c29e54"
+            },
+            "eu-west-1": {
+                "AMI": "ami-5b60b02c"
+            },
+            "us-east-1": {
+                "AMI": "ami-6e9e4b06"
+            },
+            "us-west-1": {
+                "AMI": "ami-2b2b296e"
+            },
+            "ap-southeast-2": {
+                "AMI": "ami-a164029b"
+            },
+            "ap-southeast-1": {
+                "AMI": "ami-d482da86"
+            },
+            "eu-central-1": {
+                "AMI": "ami-ae380eb3"
+            }
         },
-        "RDPAMI": {
-		"us-west-2": {"AMI":"ami-e5f7bbd5"},
-		"sa-east-1": {"AMI":"ami-77a1156a"},
-		"ap-northeast-1": {"AMI":"ami-73d0e672"},
-		"eu-west-1": {"AMI":"ami-32228e45"},
-		"us-east-1": {"AMI":"ami-7614ac1e"},
-		"us-west-1": {"AMI":"ami-2f43566a"},
-		"ap-southeast-2": {"AMI":"ami-995c31a3"},
-		"ap-southeast-1": {"AMI":"ami-c6634294"},
-		"eu-central-1": {"AMI":"ami-3c310721"}
+        "AWSWinRegionMap": {
+            "AMI": {
+                "Name": "Windows_Server-2012-R2_RTM-English-64Bit-Base-2016.04.13"
+            },
+            "ap-northeast-1": {
+                "WS2012R2": "ami-ff435e91"
+            },
+            "ap-northeast-2": {
+                "WS2012R2": "ami-c6de16a8"
+            },
+            "ap-southeast-1": {
+                "WS2012R2": "ami-63489d00"
+            },
+            "ap-southeast-2": {
+                "WS2012R2": "ami-a1f7d5c2"
+            },
+            "eu-central-1": {
+                "WS2012R2": "ami-3acf2f55"
+            },
+            "eu-west-1": {
+                "WS2012R2": "ami-9ebb39ed"
+            },
+            "sa-east-1": {
+                "WS2012R2": "ami-6efd7302"
+            },
+            "us-east-1": {
+                "WS2012R2": "ami-c8a9baa2"
+            },
+            "us-west-1": {
+                "WS2012R2": "ami-032f5063"
+            },
+            "us-west-2": {
+                "WS2012R2": "ami-87c037e7"
+            }
         }
     },
     "Outputs": {
@@ -185,6 +227,10 @@
                         "Value": "HANA"
                     },
                     {
+                        "Key": "Name",
+                        "Value": "Private Subnet - HANA"
+                    },
+                    {
                         "Key": "Network",
                         "Value": "Private"
                     }
@@ -212,6 +258,10 @@
                     {
                         "Key": "Application",
                         "Value": "NAT and RDP"
+                    },
+                    {
+                        "Key": "Name",
+                        "Value": "Public Subnet - HANA"
                     },
                     {
                         "Key": "Network",
@@ -595,6 +645,13 @@
                                     "Resource": "*"
                                 },
                                 {
+                                    "Action": [
+                                        "sqs:*"
+                                    ],
+                                    "Effect": "Allow",
+                                    "Resource": "*"
+                                },
+                                {
                                     "Effect": "Allow",
                                     "Action": [
                                         "cloudformation:CreateStack",
@@ -771,11 +828,11 @@
                 },
                 "ImageId": {
                     "Fn::FindInMap": [
-                        "RDPAMI",
+                        "AWSWinRegionMap",
                         {
                             "Ref": "AWS::Region"
                         },
-                        "AMI"
+                        "WS2012R2"
                     ]
                 },
                 "IamInstanceProfile": {
@@ -805,7 +862,7 @@
                             [
                                 "<powershell>\n",
                                 "Set-ExecutionPolicy RemoteSigned -Force \n",
-								"Start-Process -FilePath msiexec -ArgumentList /i,  \"http://sdk-for-net.amazonwebservices.com/latest/AWSToolsAndSDKForNet.msi\", /passive -wait \n",
+                                "Start-Process -FilePath msiexec -ArgumentList /i,  \"http://sdk-for-net.amazonwebservices.com/latest/AWSToolsAndSDKForNet.msi\", /passive -wait \n",
                                 "cfn-init.exe -v -s ",
                                 {
                                     "Ref": "AWS::StackId"
