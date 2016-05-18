@@ -62,12 +62,11 @@ try {
 
     Start-BitsTransfer -Source "http://$DCName.$DomainDNSName/lync.zip" -Destination c:\cfn\downloads
 
-    Write-Verbose "Downloading/Mounting Lync Server ISO @ $(Get-Date)"
+    $driveLetter = Get-Volume | ?{$_.DriveType -eq 'CD-ROM'} | select -ExpandProperty DriveLetter
+    if ($driveLetter.Count -gt 1) {
+        throw "More than 1 mounted ISO found"
+    }
 
-    Start-BitsTransfer -Source https://s3.amazonaws.com/quickstart-reference/microsoft/lync/latest/installers/LS-E-8308.0-enUS.iso -Destination c:\cfn\downloads
-    Mount-DiskImage -ImagePath c:\cfn\downloads\LS-E-8308.0-enUS.iso
-    $driveLetter = Get-Volume | Where-Object{$_.FileSystemLabel -eq 'CD_ROM'} | select -ExpandProperty DriveLetter
-   
     Write-Verbose "Installing Lync pre-requisites @ $(Get-Date)"
 
     Start-Process "$($driveLetter):\Setup\amd64\vcredist_x64.exe" '/q' -NoNewWindow -Wait

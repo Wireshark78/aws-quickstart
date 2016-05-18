@@ -35,17 +35,14 @@ param(
 )
 
 try {
-
     Start-Transcript -Path c:\cfn\log\Install-Lync2013.ps1.txt
 
-    Write-Verbose "Downloading/Mounting Lync Server ISO @ $(Get-Date)"
+    $driveLetter = Get-Volume | ?{$_.DriveType -eq 'CD-ROM'} | select -ExpandProperty DriveLetter
+    if ($driveLetter.Count -gt 1) {
+        throw "More than 1 mounted ISO found"
+    }
 
-    Start-BitsTransfer -Source https://s3.amazonaws.com/quickstart-reference/microsoft/lync/latest/installers/LS-E-8308.0-enUS.iso -Destination c:\cfn\downloads
-    Mount-DiskImage -ImagePath c:\cfn\downloads\LS-E-8308.0-enUS.iso
-   
     Write-Verbose "Installing Lync pre-requisites @ $(Get-Date)"
-
-    $driveLetter = Get-Volume | Where-Object{$_.FileSystemLabel -eq 'CD_ROM'} | select -ExpandProperty DriveLetter
 
     Start-Process "$($driveLetter):\Setup\amd64\vcredist_x64.exe" '/q' -NoNewWindow -Wait
     Start-Process msiexec.exe "/i $($driveLetter):\Setup\amd64\Setup\ocscore.msi /qn" -NoNewWindow -Wait
@@ -106,7 +103,7 @@ try {
 
         if($DomainDNSName -ne 'example.com') {
             $topology  = $topology.Replace('example.com',$DomainDNSName)
-            Set-Content -Path C:\cfn\scripts\topology.xml -Value $topology        
+            Set-Content -Path C:\cfn\scripts\topology.xml -Value $topology -Force
         }
 
         Publish-CSTopology -Filename C:\cfn\scripts\topology.xml -Force
