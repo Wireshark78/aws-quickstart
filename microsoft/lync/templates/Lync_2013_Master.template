@@ -310,7 +310,7 @@
                     "VPC": {
                         "Fn::GetAtt": [
                             "ADStack",
-                            "Outputs.VPC"
+                            "Outputs.VPCID"
                         ]
                     },
                     "FE1PrivateIp": {
@@ -334,25 +334,25 @@
                     "PrivateSubnet1": {
                         "Fn::GetAtt": [
                             "ADStack",
-                            "Outputs.PrivateSubnet1Id"
+                            "Outputs.PrivateSubnet1ID"
                         ]
                     },
                     "PrivateSubnet2": {
                         "Fn::GetAtt": [
                             "ADStack",
-                            "Outputs.PrivateSubnet2Id"
+                            "Outputs.PrivateSubnet2ID"
                         ]
                     },
                     "PublicSubnet1": {
                         "Fn::GetAtt": [
                             "ADStack",
-                            "Outputs.PublicSubnet1Id"
+                            "Outputs.PublicSubnet1ID"
                         ]
                     },
                     "PublicSubnet2": {
                         "Fn::GetAtt": [
                             "ADStack",
-                            "Outputs.PublicSubnet2Id"
+                            "Outputs.PublicSubnet2ID"
                         ]
                     },
                     "VPCCIDR": {
