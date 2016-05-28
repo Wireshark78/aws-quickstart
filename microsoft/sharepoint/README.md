@@ -1,7 +1,3 @@
-aws-quickstart
-==============
+# aws-quickstart
 
-Microsoft SharePoint Server 2013
-
-https://s3.amazonaws.com/quickstart-reference/microsoft/sharepoint/latest/doc/Microsoft_SharePoint_2013_on_AWS.pdf
- 
+This has moved to https://github.com/aws-quickstart/quickstart-microsoft-sharepoint
