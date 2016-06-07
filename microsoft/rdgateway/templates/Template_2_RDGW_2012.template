@@ -1,210 +1,178 @@
 {
-    "AWSTemplateFormatVersion" : "2010-09-09",
-    "Description"              : "(0006) - This template is intended to be installed into an existing VPC with two public subnets. It will deploy one RD Gateway in each public VPC subnet. **WARNING** This template creates Amazon EC2 Windows instance and related resources. You will be billed for the AWS resources used if you create a stack from this template.",
-    "Parameters"               : {
-        "KeyPairName" : {
-            "Description" : "Public/private key pairs allow you to securely connect to your instance after it launches",
-            "Type"        : "AWS::EC2::KeyPair::KeyName"
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "(0006) - This template is intended to be installed into an existing VPC with two public subnets. It will deploy one RD Gateway in each public VPC subnet. **WARNING** This template creates Amazon EC2 Windows instance and related resources. You will be billed for the AWS resources used if you create a stack from this template.",
+    "Parameters": {
+        "KeyPairName": {
+            "Description": "Public/private key pairs allow you to securely connect to your instance after it launches",
+            "Type": "AWS::EC2::KeyPair::KeyName"
         },
-        "RDGWInstanceType" : {
-            "Description" : "Amazon EC2 instance type for the Remote Desktop Gatweway Instance",
-            "Type"        : "String",
-            "Default"     : "m4.xlarge",
-            "AllowedValues" : [
+        "RDGWInstanceType": {
+            "Description": "Amazon EC2 instance type for the Remote Desktop Gatweway Instance",
+            "Type": "String",
+            "Default": "m4.xlarge",
+            "AllowedValues": [
                 "m4.large",
                 "m4.xlarge",
                 "m4.2xlarge",
                 "m4.4xlarge"
             ]
         },
-        "RDGWNetBIOSName1" : {
-            "Description" : "NetBIOS name of the 1st RD Gateway (upto 15 characters)",
-            "Type"        : "String",
-            "Default"     : "RDGW1",
-            "MinLength"   : "1",
-            "MaxLength"   : "15",
-            "AllowedPattern" : "[a-zA-Z0-9]+"
+        "RDGWNetBIOSName1": {
+            "Description": "NetBIOS name of the 1st RD Gateway (upto 15 characters)",
+            "Type": "String",
+            "Default": "RDGW1",
+            "MinLength": "1",
+            "MaxLength": "15",
+            "AllowedPattern": "[a-zA-Z0-9]+"
         },
-        "RDGWNetBIOSName2" : {
-            "Description" : "NetBIOS name of the 2nd RD Gateway (upto 15 characters)",
-            "Type"        : "String",
-            "Default"     : "RDGW2",
-            "MinLength"   : "1",
-            "MaxLength"   : "15",
-            "AllowedPattern" : "[a-zA-Z0-9]+"
+        "RDGWNetBIOSName2": {
+            "Description": "NetBIOS name of the 2nd RD Gateway (upto 15 characters)",
+            "Type": "String",
+            "Default": "RDGW2",
+            "MinLength": "1",
+            "MaxLength": "15",
+            "AllowedPattern": "[a-zA-Z0-9]+"
         },
-        "AdminUser"        : {
-            "Description" : "User name for the new local administrator account",
-            "Type"        : "String",
-            "Default"     : "StackAdmin",
-            "MinLength"   : "5",
-            "MaxLength"   : "25",
-            "AllowedPattern" : "[a-zA-Z0-9]*"
+        "AdminUser": {
+            "Description": "User name for the new local administrator account",
+            "Type": "String",
+            "Default": "StackAdmin",
+            "MinLength": "5",
+            "MaxLength": "25",
+            "AllowedPattern": "[a-zA-Z0-9]*"
         },
-        "AdminPassword"    : {
-            "Description" : "Password for the administrative account. Must be at least 8 characters containing letters, numbers and symbols",
-            "Type"        : "String",
-            "MinLength"   : "8",
-            "MaxLength"   : "32",
-            "AllowedPattern" : "(?=^.{6,255}$)((?=.*\\d)(?=.*[A-Z])(?=.*[a-z])|(?=.*\\d)(?=.*[^A-Za-z0-9])(?=.*[a-z])|(?=.*[^A-Za-z0-9])(?=.*[A-Z])(?=.*[a-z])|(?=.*\\d)(?=.*[A-Z])(?=.*[^A-Za-z0-9]))^.*",
-            "NoEcho"         : "true"
+        "AdminPassword": {
+            "Description": "Password for the administrative account. Must be at least 8 characters containing letters, numbers and symbols",
+            "Type": "String",
+            "MinLength": "8",
+            "MaxLength": "32",
+            "AllowedPattern": "(?=^.{6,255}$)((?=.*\\d)(?=.*[A-Z])(?=.*[a-z])|(?=.*\\d)(?=.*[^A-Za-z0-9])(?=.*[a-z])|(?=.*[^A-Za-z0-9])(?=.*[A-Z])(?=.*[a-z])|(?=.*\\d)(?=.*[A-Z])(?=.*[^A-Za-z0-9]))^.*",
+            "NoEcho": "true"
         },
-        "DomainDNSName"    : {
-            "Description" : "Fully qualified domain name (FQDN) e.g. example.com",
-            "Type"        : "String",
-            "Default"     : "example.com",
-            "MinLength"   : "3",
-            "MaxLength"   : "25",
-            "AllowedPattern" : "[a-zA-Z0-9]+\\..+"
+        "DomainDNSName": {
+            "Description": "Fully qualified domain name (FQDN) e.g. example.com",
+            "Type": "String",
+            "Default": "example.com",
+            "MinLength": "3",
+            "MaxLength": "25",
+            "AllowedPattern": "[a-zA-Z0-9]+\\..+"
         },
-        "RDGW1PrivateIp"        : {
-            "Description" : "Fixed private IP for the first RD Gateway located in AZ1",
-            "Type"        : "String",
-            "Default"     : "10.0.32.11"
+        "RDGW1PrivateIp": {
+            "Description": "Fixed private IP for the first RD Gateway located in AZ1",
+            "Type": "String",
+            "Default": "10.0.32.11"
         },
-        "RDGW2PrivateIp"        : {
-            "Description" : "Fixed private IP for the second RD Gateway located in AZ2",
-            "Type"        : "String",
-            "Default"     : "10.0.96.11"
+        "RDGW2PrivateIp": {
+            "Description": "Fixed private IP for the second RD Gateway located in AZ2",
+            "Type": "String",
+            "Default": "10.0.96.11"
         },
-        "VPC"                       : {
-            "Description" : "ID of the VPC (e.g., vpc-0343606e)",
-            "Type"        : "AWS::EC2::VPC::Id"
+        "VPC": {
+            "Description": "ID of the VPC (e.g., vpc-0343606e)",
+            "Type": "AWS::EC2::VPC::Id"
         },
-        "RDGW1Subnet"           : {
-            "Description" : "ID of the public subnet you want to provision the first RD Gateway into (e.g., subnet-a0246dcd)",
-            "Type"        : "AWS::EC2::Subnet::Id"
+        "RDGW1Subnet": {
+            "Description": "ID of the public subnet you want to provision the first RD Gateway into (e.g., subnet-a0246dcd)",
+            "Type": "AWS::EC2::Subnet::Id"
         },
-        "RDGW2Subnet"           : {
-            "Description" : "ID of the subnet you want to provision the second RD Gateway into (e.g., subnet-e3246d8e)",
-            "Type"        : "AWS::EC2::Subnet::Id"
+        "RDGW2Subnet": {
+            "Description": "ID of the subnet you want to provision the second RD Gateway into (e.g., subnet-e3246d8e)",
+            "Type": "AWS::EC2::Subnet::Id"
         }
     },
-    "Mappings"                 : {
-        "AWSInstanceType2Arch" : {
-            "m1.small" : {
-                "Arch" : "64"
+    "Mappings": {
+        "AWSAMIRegionMap": {
+            "AMI": {
+                "WS2012R2": "Windows_Server-2012-R2_RTM-English-64Bit-Base-2016.05.11"
             },
-            "m1.medium" : {
-                "Arch" : "64"
+            "ap-northeast-1": {
+                "WS2012R2": "ami-447a9d25"
             },
-            "m1.large"  : {
-                "Arch" : "64"
+            "ap-northeast-2": {
+                "WS2012R2": "ami-3e75bd50"
             },
-            "m2.xlarge" : {
-                "Arch" : "64"
+            "ap-southeast-1": {
+                "WS2012R2": "ami-5bf72138"
             },
-            "m2.2xlarge" : {
-                "Arch" : "64"
+            "ap-southeast-2": {
+                "WS2012R2": "ami-4c6d422f"
             },
-            "m2.4xlarge" : {
-                "Arch" : "64"
+            "eu-central-1": {
+                "WS2012R2": "ami-827d90ed"
             },
-            "m3.xlarge"  : {
-                "Arch" : "64"
+            "eu-west-1": {
+                "WS2012R2": "ami-29eb7e5a"
             },
-            "c1.medium"  : {
-                "Arch" : "64"
+            "sa-east-1": {
+                "WS2012R2": "ami-588f0734"
             },
-            "c1.xlarge"  : {
-                "Arch" : "64"
+            "us-east-1": {
+                "WS2012R2": "ami-e0e00f8d"
             },
-            "m4.xlarge" : {
-                "Arch" : "64"
+            "us-west-1": {
+                "WS2012R2": "ami-b8c5bcd8"
             },
-            "m4.2xlarge" : {
-                "Arch" : "64"
-            },
-            "m4.4xlarge" : {
-                "Arch" : "64"
-            }
-        },
-        "AWSRegionArch2AMI"    : {
-            "ap-northeast-1" : {
-                "64" : "ami-57282639"
-            },
-            "ap-southeast-1" : {
-                "64" : "ami-f8478f9b"
-            },
-            "ap-southeast-2" : {
-                "64" : "ami-1af6d779"
-            },
-            "eu-central-1" : {
-                "64" : "ami-1135d17e"
-            },
-            "eu-west-1" : {
-                "64" : "ami-c6972fb5"
-            },
-            "sa-east-1" : {
-                "64" : "ami-bdf974d1"
-            },
-            "us-east-1" : {
-                "64" : "ami-3d787d57"
-            },
-            "us-west-1" : {
-                "64" : "ami-df4437bf"
-            },
-            "us-west-2" : {
-                "64" : "ami-1719f677"
+            "us-west-2": {
+                "WS2012R2": "ami-8db945ed"
             }
         }
     },
-    "Resources"                : {
-        "RdgwEIP"                             : {
-            "Type" : "AWS::EC2::EIP",
-            "Properties" : {
-                "Domain" : "vpc",
-                "InstanceId" : {
-                    "Ref" : "RDGateway"
+    "Resources": {
+        "RdgwEIP": {
+            "Type": "AWS::EC2::EIP",
+            "Properties": {
+                "Domain": "vpc",
+                "InstanceId": {
+                    "Ref": "RDGateway"
                 }
             }
         },
-        "Rdgw2EIP"                            : {
-            "Type" : "AWS::EC2::EIP",
-            "Properties" : {
-                "Domain" : "vpc",
-                "InstanceId" : {
-                    "Ref" : "RDGateway2"
+        "Rdgw2EIP": {
+            "Type": "AWS::EC2::EIP",
+            "Properties": {
+                "Domain": "vpc",
+                "InstanceId": {
+                    "Ref": "RDGateway2"
                 }
             }
         },
-        "RDGateway"                           : {
-            "Type" : "AWS::EC2::Instance",
-            "Metadata"  : {
-                "AWS::CloudFormation::Init" : {
-                    "configSets" : {
-                        "config" : [
+        "RDGateway": {
+            "Type": "AWS::EC2::Instance",
+            "Metadata": {
+                "AWS::CloudFormation::Init": {
+                    "configSets": {
+                        "config": [
                             "setup",
                             "rename",
                             "installRDS",
                             "finalize"
                         ]
                     },
-                    "setup"      : {
-                        "files" : {
-                            "c:\\cfn\\cfn-hup.conf" : {
-                                "content" : {
-                                    "Fn::Join" : [
+                    "setup": {
+                        "files": {
+                            "c:\\cfn\\cfn-hup.conf": {
+                                "content": {
+                                    "Fn::Join": [
                                         "",
                                         [
                                             "[main]\n",
                                             "stack=",
                                             {
-                                                "Ref" : "AWS::StackName"
+                                                "Ref": "AWS::StackName"
                                             },
                                             "\n",
                                             "region=",
                                             {
-                                                "Ref" : "AWS::Region"
+                                                "Ref": "AWS::Region"
                                             },
                                             "\n"
                                         ]
                                     ]
                                 }
                             },
-                            "c:\\cfn\\hooks.d\\cfn-auto-reloader.conf" : {
-                                "content" : {
-                                    "Fn::Join" : [
+                            "c:\\cfn\\hooks.d\\cfn-auto-reloader.conf": {
+                                "content": {
+                                    "Fn::Join": [
                                         "",
                                         [
                                             "[cfn-auto-reloader-hook]\n",
@@ -212,28 +180,28 @@
                                             "path=Resources.RDGateway.Metadata.AWS::CloudFormation::Init\n",
                                             "action=cfn-init.exe -v -c config -s ",
                                             {
-                                                "Ref" : "AWS::StackId"
+                                                "Ref": "AWS::StackId"
                                             },
                                             " -r RDGateway",
                                             " --region ",
                                             {
-                                                "Ref" : "AWS::Region"
+                                                "Ref": "AWS::Region"
                                             },
                                             "\n"
                                         ]
                                     ]
                                 }
                             },
-                            "c:\\cfn\\scripts\\Configure-RDGW.ps1"     : {
-                                "source" : "https://s3.amazonaws.com/microsoft_windows/scripts/Configure-RDGW.ps1"
+                            "c:\\cfn\\scripts\\Configure-RDGW.ps1": {
+                                "source": "https://s3.amazonaws.com/microsoft_windows/scripts/Configure-RDGW.ps1"
                             }
                         },
-                        "services" : {
-                            "windows" : {
-                                "cfn-hup" : {
-                                    "enabled" : "true",
-                                    "ensureRunning" : "true",
-                                    "files"         : [
+                        "services": {
+                            "windows": {
+                                "cfn-hup": {
+                                    "enabled": "true",
+                                    "ensureRunning": "true",
+                                    "files": [
                                         "c:\\cfn\\cfn-hup.conf",
                                         "c:\\cfn\\hooks.d\\cfn-auto-reloader.conf"
                                     ]
@@ -241,30 +209,30 @@
                             }
                         }
                     },
-                    "rename"     : {
-                        "commands" : {
-                            "1-execute-powershell-script-RenameComputer" : {
-                                "command" : {
-                                    "Fn::Join" : [
+                    "rename": {
+                        "commands": {
+                            "1-execute-powershell-script-RenameComputer": {
+                                "command": {
+                                    "Fn::Join": [
                                         "",
                                         [
                                             "powershell.exe Rename-Computer -NewName ",
                                             {
-                                                "Ref" : "RDGWNetBIOSName1"
-                                            },											
-											" -Restart"
+                                                "Ref": "RDGWNetBIOSName1"
+                                            },
+                                            " -Restart"
                                         ]
                                     ]
                                 },
-								"waitAfterCompletion" : "forever"
+                                "waitAfterCompletion": "forever"
                             }
                         }
                     },
-                    "installRDS" : {
-                        "commands" : {
-                            "a-install-rds" : {
-                                "command" : {
-                                    "Fn::Join" : [
+                    "installRDS": {
+                        "commands": {
+                            "a-install-rds": {
+                                "command": {
+                                    "Fn::Join": [
                                         "",
                                         [
                                             "powershell.exe \"Install-WindowsFeature RDS-Gateway,RSAT-RDS-Gateway\""
@@ -272,54 +240,54 @@
                                     ]
                                 }
                             },
-                            "b-create-admin" : {
-                                "command" : {
-                                    "Fn::Join" : [
+                            "b-create-admin": {
+                                "command": {
+                                    "Fn::Join": [
                                         "",
                                         [
                                             "net user /add ",
                                             {
-                                                "Ref" : "AdminUser"
+                                                "Ref": "AdminUser"
                                             },
                                             " ",
                                             {
-                                                "Ref" : "AdminPassword"
+                                                "Ref": "AdminPassword"
                                             }
                                         ]
                                     ]
                                 }
                             },
-                            "c-set-admin-group" : {
-                                "command" : {
-                                    "Fn::Join" : [
+                            "c-set-admin-group": {
+                                "command": {
+                                    "Fn::Join": [
                                         "",
                                         [
                                             "net localgroup Administrators ",
                                             {
-                                                "Ref" : "AdminUser"
+                                                "Ref": "AdminUser"
                                             },
                                             " /ADD"
                                         ]
                                     ]
                                 }
                             },
-                            "d-configure-rdgw"       : {
-                                "command" : {
-                                    "Fn::Join" : [
+                            "d-configure-rdgw": {
+                                "command": {
+                                    "Fn::Join": [
                                         "",
                                         [
                                             "powershell.exe -ExecutionPolicy RemoteSigned",
                                             " C:\\cfn\\scripts\\Configure-RDGW.ps1 -ServerFQDN ",
                                             {
-                                                "Ref" : "RDGWNetBIOSName2"
+                                                "Ref": "RDGWNetBIOSName2"
                                             },
                                             ".",
                                             {
-                                                "Ref" : "DomainDNSName"
+                                                "Ref": "DomainDNSName"
                                             },
                                             " -DomainNetBiosName BUILTIN -GroupName administrators -UserName ",
                                             {
-                                                "Ref" : "AdminUser"
+                                                "Ref": "AdminUser"
                                             }
                                         ]
                                     ]
@@ -327,16 +295,16 @@
                             }
                         }
                     },
-                    "finalize"   : {
-                        "commands" : {
-                            "1-signal-success" : {
-                                "command" : {
-                                    "Fn::Join" : [
+                    "finalize": {
+                        "commands": {
+                            "1-signal-success": {
+                                "command": {
+                                    "Fn::Join": [
                                         "",
                                         [
                                             "cfn-signal.exe -e 0 \"",
                                             {
-                                                "Ref" : "RDGWWaitHandle"
+                                                "Ref": "RDGWWaitHandle"
                                             },
                                             "\""
                                         ]
@@ -347,70 +315,62 @@
                     }
                 }
             },
-            "Properties" : {
-                "ImageId" : {
-                    "Fn::FindInMap" : [
-                        "AWSRegionArch2AMI",
+            "Properties": {
+                "ImageId": {
+                    "Fn::FindInMap": [
+                        "AWSAMIRegionMap",
                         {
-                            "Ref" : "AWS::Region"
+                            "Ref": "AWS::Region"
                         },
-                        {
-                            "Fn::FindInMap" : [
-                                "AWSInstanceType2Arch",
-                                {
-                                    "Ref" : "RDGWInstanceType"
-                                },
-                                "Arch"
-                            ]
-                        }
+                        "WS2012R2"
                     ]
                 },
-                "InstanceType" : {
-                    "Ref" : "RDGWInstanceType"
+                "InstanceType": {
+                    "Ref": "RDGWInstanceType"
                 },
-                "SubnetId"     : {
-                    "Ref" : "RDGW1Subnet"
+                "SubnetId": {
+                    "Ref": "RDGW1Subnet"
                 },
-                "Tags"         : [
+                "Tags": [
                     {
-                        "Key" : "Name",
-                        "Value" : "RDGW1"
+                        "Key": "Name",
+                        "Value": "RDGW1"
                     }
                 ],
-                "BlockDeviceMappings" : [
+                "BlockDeviceMappings": [
                     {
-                        "DeviceName" : "/dev/sda1",
-                        "Ebs"        : {
-                            "VolumeSize" : "50",
-							"VolumeType" : "gp2"
+                        "DeviceName": "/dev/sda1",
+                        "Ebs": {
+                            "VolumeSize": "50",
+                            "VolumeType": "gp2"
                         }
                     }
                 ],
-                "SecurityGroupIds" : [
+                "SecurityGroupIds": [
                     {
-                        "Ref" : "RDGWSecurityGroup"
+                        "Ref": "RDGWSecurityGroup"
                     }
                 ],
-                "PrivateIpAddress" : {
-                    "Ref" : "RDGW1PrivateIp"
+                "PrivateIpAddress": {
+                    "Ref": "RDGW1PrivateIp"
                 },
-                "KeyName"          : {
-                    "Ref" : "KeyPairName"
+                "KeyName": {
+                    "Ref": "KeyPairName"
                 },
-                "UserData"         : {
-                    "Fn::Base64" : {
-                        "Fn::Join" : [
+                "UserData": {
+                    "Fn::Base64": {
+                        "Fn::Join": [
                             "",
                             [
                                 "<script>\n",
                                 "cfn-init.exe -v -c config -s ",
                                 {
-                                    "Ref" : "AWS::StackId"
+                                    "Ref": "AWS::StackId"
                                 },
                                 " -r RDGateway",
                                 " --region ",
                                 {
-                                    "Ref" : "AWS::Region"
+                                    "Ref": "AWS::Region"
                                 },
                                 "\n",
                                 "</script>\n"
@@ -420,43 +380,43 @@
                 }
             }
         },
-        "RDGateway2"                          : {
-            "Type" : "AWS::EC2::Instance",
-            "Metadata"  : {
-                "AWS::CloudFormation::Init" : {
-                    "configSets" : {
-                        "config" : [
+        "RDGateway2": {
+            "Type": "AWS::EC2::Instance",
+            "Metadata": {
+                "AWS::CloudFormation::Init": {
+                    "configSets": {
+                        "config": [
                             "setup",
                             "rename",
                             "installRDS",
                             "finalize"
                         ]
                     },
-                    "setup"      : {
-                        "files" : {
-                            "c:\\cfn\\cfn-hup.conf" : {
-                                "content" : {
-                                    "Fn::Join" : [
+                    "setup": {
+                        "files": {
+                            "c:\\cfn\\cfn-hup.conf": {
+                                "content": {
+                                    "Fn::Join": [
                                         "",
                                         [
                                             "[main]\n",
                                             "stack=",
                                             {
-                                                "Ref" : "AWS::StackName"
+                                                "Ref": "AWS::StackName"
                                             },
                                             "\n",
                                             "region=",
                                             {
-                                                "Ref" : "AWS::Region"
+                                                "Ref": "AWS::Region"
                                             },
                                             "\n"
                                         ]
                                     ]
                                 }
                             },
-                            "c:\\cfn\\hooks.d\\cfn-auto-reloader.conf" : {
-                                "content" : {
-                                    "Fn::Join" : [
+                            "c:\\cfn\\hooks.d\\cfn-auto-reloader.conf": {
+                                "content": {
+                                    "Fn::Join": [
                                         "",
                                         [
                                             "[cfn-auto-reloader-hook]\n",
@@ -464,28 +424,28 @@
                                             "path=Resources.RDGateway2.Metadata.AWS::CloudFormation::Init\n",
                                             "action=cfn-init.exe -v -c config -s ",
                                             {
-                                                "Ref" : "AWS::StackId"
+                                                "Ref": "AWS::StackId"
                                             },
                                             " -r RDGateway2",
                                             " --region ",
                                             {
-                                                "Ref" : "AWS::Region"
+                                                "Ref": "AWS::Region"
                                             },
                                             "\n"
                                         ]
                                     ]
                                 }
                             },
-                            "c:\\cfn\\scripts\\Configure-RDGW.ps1"     : {
-                                "source" : "https://s3.amazonaws.com/microsoft_windows/scripts/Configure-RDGW.ps1"
+                            "c:\\cfn\\scripts\\Configure-RDGW.ps1": {
+                                "source": "https://s3.amazonaws.com/microsoft_windows/scripts/Configure-RDGW.ps1"
                             }
                         },
-                        "services" : {
-                            "windows" : {
-                                "cfn-hup" : {
-                                    "enabled" : "true",
-                                    "ensureRunning" : "true",
-                                    "files"         : [
+                        "services": {
+                            "windows": {
+                                "cfn-hup": {
+                                    "enabled": "true",
+                                    "ensureRunning": "true",
+                                    "files": [
                                         "c:\\cfn\\cfn-hup.conf",
                                         "c:\\cfn\\hooks.d\\cfn-auto-reloader.conf"
                                     ]
@@ -493,30 +453,30 @@
                             }
                         }
                     },
-                    "rename"     : {
-                        "commands" : {
-                            "1-execute-powershell-script-RenameComputer" : {
-                                "command" : {
-                                    "Fn::Join" : [
+                    "rename": {
+                        "commands": {
+                            "1-execute-powershell-script-RenameComputer": {
+                                "command": {
+                                    "Fn::Join": [
                                         "",
                                         [
                                             "powershell.exe Rename-Computer -NewName ",
                                             {
-                                                "Ref" : "RDGWNetBIOSName2"
+                                                "Ref": "RDGWNetBIOSName2"
                                             },
-											" -Restart"
+                                            " -Restart"
                                         ]
                                     ]
                                 },
-								"waitAfterCompletion" : "forever"
+                                "waitAfterCompletion": "forever"
                             }
                         }
                     },
-                    "installRDS" : {
-                        "commands" : {
-                            "a-install-rds" : {
-                                "command" : {
-                                    "Fn::Join" : [
+                    "installRDS": {
+                        "commands": {
+                            "a-install-rds": {
+                                "command": {
+                                    "Fn::Join": [
                                         "",
                                         [
                                             "powershell.exe \"Install-WindowsFeature RDS-Gateway,RSAT-RDS-Gateway\""
@@ -524,50 +484,50 @@
                                     ]
                                 }
                             },
-                            "b-create-admin" : {
-                                "command" : {
-                                    "Fn::Join" : [
+                            "b-create-admin": {
+                                "command": {
+                                    "Fn::Join": [
                                         "",
                                         [
                                             "net user /add ",
                                             {
-                                                "Ref" : "AdminUser"
+                                                "Ref": "AdminUser"
                                             },
                                             " ",
                                             {
-                                                "Ref" : "AdminPassword"
+                                                "Ref": "AdminPassword"
                                             }
                                         ]
                                     ]
                                 }
                             },
-                            "c-set-admin-group" : {
-                                "command" : {
-                                    "Fn::Join" : [
+                            "c-set-admin-group": {
+                                "command": {
+                                    "Fn::Join": [
                                         "",
                                         [
                                             "net localgroup Administrators ",
                                             {
-                                                "Ref" : "AdminUser"
+                                                "Ref": "AdminUser"
                                             },
                                             " /ADD"
                                         ]
                                     ]
                                 }
                             },
-                            "d-configure-rdgw" : {
-                                "command" : {
-                                    "Fn::Join" : [
+                            "d-configure-rdgw": {
+                                "command": {
+                                    "Fn::Join": [
                                         "",
                                         [
                                             "powershell.exe -ExecutionPolicy RemoteSigned",
                                             " C:\\cfn\\scripts\\Configure-RDGW.ps1 -ServerFQDN ",
                                             {
-                                                "Ref" : "DomainDNSName"
+                                                "Ref": "DomainDNSName"
                                             },
                                             " -DomainNetBiosName ",
                                             {
-                                                "Ref" : "RDGWNetBIOSName2"
+                                                "Ref": "RDGWNetBIOSName2"
                                             },
                                             " -GroupName administrators"
                                         ]
@@ -576,16 +536,16 @@
                             }
                         }
                     },
-                    "finalize"   : {
-                        "commands" : {
-                            "1-signal-success" : {
-                                "command" : {
-                                    "Fn::Join" : [
+                    "finalize": {
+                        "commands": {
+                            "1-signal-success": {
+                                "command": {
+                                    "Fn::Join": [
                                         "",
                                         [
                                             "cfn-signal.exe -e 0 \"",
                                             {
-                                                "Ref" : "RDGW2WaitHandle"
+                                                "Ref": "RDGW2WaitHandle"
                                             },
                                             "\""
                                         ]
@@ -596,70 +556,62 @@
                     }
                 }
             },
-            "Properties" : {
-                "ImageId" : {
-                    "Fn::FindInMap" : [
-                        "AWSRegionArch2AMI",
+            "Properties": {
+                "ImageId": {
+                    "Fn::FindInMap": [
+                        "AWSAMIRegionMap",
                         {
-                            "Ref" : "AWS::Region"
+                            "Ref": "AWS::Region"
                         },
-                        {
-                            "Fn::FindInMap" : [
-                                "AWSInstanceType2Arch",
-                                {
-                                    "Ref" : "RDGWInstanceType"
-                                },
-                                "Arch"
-                            ]
-                        }
+                        "WS2012R2"
                     ]
                 },
-                "InstanceType" : {
-                    "Ref" : "RDGWInstanceType"
+                "InstanceType": {
+                    "Ref": "RDGWInstanceType"
                 },
-                "SubnetId"     : {
-                    "Ref" : "RDGW2Subnet"
+                "SubnetId": {
+                    "Ref": "RDGW2Subnet"
                 },
-                "Tags"         : [
+                "Tags": [
                     {
-                        "Key" : "Name",
-                        "Value" : "RDGW2"
+                        "Key": "Name",
+                        "Value": "RDGW2"
                     }
                 ],
-                "BlockDeviceMappings" : [
+                "BlockDeviceMappings": [
                     {
-                        "DeviceName" : "/dev/sda1",
-                        "Ebs"        : {
-                            "VolumeSize" : "50",
-							"VolumeType" : "gp2"
+                        "DeviceName": "/dev/sda1",
+                        "Ebs": {
+                            "VolumeSize": "50",
+                            "VolumeType": "gp2"
                         }
                     }
                 ],
-                "SecurityGroupIds" : [
+                "SecurityGroupIds": [
                     {
-                        "Ref" : "RDGWSecurityGroup"
+                        "Ref": "RDGWSecurityGroup"
                     }
                 ],
-                "PrivateIpAddress" : {
-                    "Ref" : "RDGW2PrivateIp"
+                "PrivateIpAddress": {
+                    "Ref": "RDGW2PrivateIp"
                 },
-                "KeyName"          : {
-                    "Ref" : "KeyPairName"
+                "KeyName": {
+                    "Ref": "KeyPairName"
                 },
-                "UserData"         : {
-                    "Fn::Base64" : {
-                        "Fn::Join" : [
+                "UserData": {
+                    "Fn::Base64": {
+                        "Fn::Join": [
                             "",
                             [
                                 "<script>\n",
                                 "cfn-init.exe -v -c config -s ",
                                 {
-                                    "Ref" : "AWS::StackId"
+                                    "Ref": "AWS::StackId"
                                 },
                                 " -r RDGateway2",
                                 " --region ",
                                 {
-                                    "Ref" : "AWS::Region"
+                                    "Ref": "AWS::Region"
                                 },
                                 "\n",
                                 "</script>\n"
@@ -669,98 +621,98 @@
                 }
             }
         },
-        "RDGWWaitCondition"                   : {
-            "Type" : "AWS::CloudFormation::WaitCondition",
-            "DependsOn" : "RDGateway",
-            "Properties" : {
-                "Handle" : {
-                    "Ref" : "RDGWWaitHandle"
+        "RDGWWaitCondition": {
+            "Type": "AWS::CloudFormation::WaitCondition",
+            "DependsOn": "RDGateway",
+            "Properties": {
+                "Handle": {
+                    "Ref": "RDGWWaitHandle"
                 },
-                "Timeout" : "3000"
+                "Timeout": "3000"
             }
         },
-        "RDGWWaitHandle"                      : {
-            "Type" : "AWS::CloudFormation::WaitConditionHandle"
+        "RDGWWaitHandle": {
+            "Type": "AWS::CloudFormation::WaitConditionHandle"
         },
-        "RDGW2WaitCondition"                  : {
-            "Type" : "AWS::CloudFormation::WaitCondition",
-            "DependsOn" : "RDGateway2",
-            "Properties" : {
-                "Handle" : {
-                    "Ref" : "RDGW2WaitHandle"
+        "RDGW2WaitCondition": {
+            "Type": "AWS::CloudFormation::WaitCondition",
+            "DependsOn": "RDGateway2",
+            "Properties": {
+                "Handle": {
+                    "Ref": "RDGW2WaitHandle"
                 },
-                "Timeout" : "3000"
+                "Timeout": "3000"
             }
         },
-        "RDGW2WaitHandle"                     : {
-            "Type" : "AWS::CloudFormation::WaitConditionHandle"
+        "RDGW2WaitHandle": {
+            "Type": "AWS::CloudFormation::WaitConditionHandle"
         },
-        "RDGWSecurityGroup"                   : {
-            "Type" : "AWS::EC2::SecurityGroup",
-            "Properties" : {
-                "GroupDescription" : "Enable RDP access from the Internet",
-                "VpcId"            : {
-                    "Ref" : "VPC"
+        "RDGWSecurityGroup": {
+            "Type": "AWS::EC2::SecurityGroup",
+            "Properties": {
+                "GroupDescription": "Enable RDP access from the Internet",
+                "VpcId": {
+                    "Ref": "VPC"
                 },
-                "SecurityGroupIngress" : [
+                "SecurityGroupIngress": [
                     {
-                        "IpProtocol" : "tcp",
-                        "FromPort"   : "3389",
-                        "ToPort"     : "3389",
-                        "CidrIp"     : "0.0.0.0/0"
+                        "IpProtocol": "tcp",
+                        "FromPort": "3389",
+                        "ToPort": "3389",
+                        "CidrIp": "0.0.0.0/0"
                     },
                     {
-                        "IpProtocol" : "icmp",
-                        "FromPort"   : "-1",
-                        "ToPort"     : "-1",
-                        "CidrIp"     : "0.0.0.0/0"
+                        "IpProtocol": "icmp",
+                        "FromPort": "-1",
+                        "ToPort": "-1",
+                        "CidrIp": "0.0.0.0/0"
                     }
                 ]
             }
         }
     },
-    "Outputs"                  : {
-        "RDGW1ElasticIP" : {
-            "Value" : {
-                "Ref" : "RdgwEIP"
+    "Outputs": {
+        "RDGW1ElasticIP": {
+            "Value": {
+                "Ref": "RdgwEIP"
             },
-            "Description" : "Elastic IP address of the first Remote Desktop Gateway (RDGW1) in AZ1"
+            "Description": "Elastic IP address of the first Remote Desktop Gateway (RDGW1) in AZ1"
         },
-        "RootCert1"      : {
-            "Value" : {
-                "Fn::Join" : [
+        "RootCert1": {
+            "Value": {
+                "Fn::Join": [
                     "",
                     [
-						"c:\\",
-						{
-                        "Ref" : "RDGWNetBIOSName1"
-						},
-						".cer"
+                        "c:\\",
+                        {
+                            "Ref": "RDGWNetBIOSName1"
+                        },
+                        ".cer"
                     ]
                 ]
             },
-            "Description" : "Location of the root SSL certificate on the first Remote Desktop Gateway (RDGW1) in AZ1"
+            "Description": "Location of the root SSL certificate on the first Remote Desktop Gateway (RDGW1) in AZ1"
         },
-        "RDGW2ElasticIP" : {
-            "Value" : {
-                "Ref" : "Rdgw2EIP"
+        "RDGW2ElasticIP": {
+            "Value": {
+                "Ref": "Rdgw2EIP"
             },
-            "Description" : "Elastic IP address of the second Remote Desktop Gateway (RDGW2) in AZ2"
+            "Description": "Elastic IP address of the second Remote Desktop Gateway (RDGW2) in AZ2"
         },
-        "RootCert2"      : {
-            "Value" : {
-                "Fn::Join" : [
+        "RootCert2": {
+            "Value": {
+                "Fn::Join": [
                     "",
                     [
-						"c:\\",
-						{
-                        "Ref" : "RDGWNetBIOSName2"
-						},
-						".cer"
+                        "c:\\",
+                        {
+                            "Ref": "RDGWNetBIOSName2"
+                        },
+                        ".cer"
                     ]
                 ]
             },
-            "Description" : "Location of the root SSL certificate on the second Remote Desktop Gateway (RDGW2) in AZ2"
+            "Description": "Location of the root SSL certificate on the second Remote Desktop Gateway (RDGW2) in AZ2"
         }
     }
 }
