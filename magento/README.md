@@ -1,6 +1,5 @@
-aws-quickstart
-==============
+# aws-quickstart
 
-Quickstart code to automate Magento deployment
+This repo has moved to https://github.com/aws-quickstart/quickstart-magento
 
-http://aws.amazon.com/quickstart  
+Please update watch notifications.
