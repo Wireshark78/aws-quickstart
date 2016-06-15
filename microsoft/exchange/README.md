@@ -1,3 +1,3 @@
-aws-quickstart
+#aws-quickstart
 
 This has moved to https://github.com/aws-quickstart/quickstart-microsoft-exchange
