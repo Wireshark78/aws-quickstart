@@ -1,6 +1,6 @@
-aws-quickstart
+AWS Quick Start Reference Deployments
 ==============
 
-Official repository for AWS Quick Start  
+This repository has moved to a new location: https://github.com/aws-quickstart
 
-http://aws.amazon.com/quickstart  
+Information about AWS Quick Start Reference Deployments: http://aws.amazon.com/quickstart  
