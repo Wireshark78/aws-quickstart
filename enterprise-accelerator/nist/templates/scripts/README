@@ -1,5 +1,0 @@
-This directory for any associated non-CloudFormation templates, scripts, or applications:
-	custom AMI configs
-	Chef/Puppet recipies
-	hardening scripts
-	Lambda functions

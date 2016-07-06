@@ -1,2 +1,0 @@
-Security-focused Standardized Architecture for NIST 800-53 on AWS
-Copyright 2016 Amazon.com, Inc. or its affiliates. All Rights Reserved. 
