@@ -1,6 +1,5 @@
-aws-quickstart
-==============
+# aws-quickstart
 
-SAP based Quick Starts
+This repo has moved to https://github.com/aws-quickstart org
 
-http://aws.amazon.com/quickstart  
+Please update watch notifications.
